@@ -1,16 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
-void main() => runApp(CupertinoApp(home: LifeTracker()));
+void main() => runApp(MaterialApp(home: LifeTracker()));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
-      title: 'My Life Weeks',
+    return MaterialApp(
       home: LifeTracker(),
     );
   }
@@ -69,58 +66,53 @@ class _LifeTrackerState extends State<LifeTracker> {
         ),
       );
     }
-
     double percentComplete = _ageInSeconds / (80 * 365 * 24 * 60 * 60);
     int percentCompleteRounded = (percentComplete * 100).round();
-
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('My Life Weeks'),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Life Tracker'),
       ),
-      child: SafeArea(child:
-      Padding(
-        padding: EdgeInsets.all(20),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                child: const Text('Select your birthdate'),
-
-                onPressed: ()  async {
-                  DateTime? selectedDate = await showDatePicker(
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  child: const Text('Select your birthdate'),
+                  onPressed: () async {
+                    DateTime? selectedDate = await showDatePicker(
                     context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime.now(),
-                  );
-                  _updateAgeInWeeks(selectedDate!);
-                  _updateAgeInOtherUnits(selectedDate);
-                },
-
-              ),
-              SizedBox(height: 20),
-              Text(
-                  style: TextStyle(fontSize: 18.0),
-                  textAlign: TextAlign.start,
-                  'Your age in weeks: $_ageInWeeks'),
-              SizedBox(height: 20),
-              Text(
-                  style: TextStyle(fontSize: 18.0),
-                  'Your age in months: $_ageInMonths'),
-              SizedBox(height: 20),
-              Text(
-                  style: TextStyle(fontSize: 18.0),
-                  'Your age in minutes: $_ageInMinutes'),
-              SizedBox(height: 20),
-              Text(
-                  style: TextStyle(fontSize: 18.0),
-                  'Your age in seconds: $_ageInSeconds'),
-              SizedBox(height: 20),
-              Expanded(
-                child: GridView.count(
-                  crossAxisCount: 52,
-                  children: squares,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+                    _updateAgeInWeeks(selectedDate!);
+                    _updateAgeInOtherUnits(selectedDate);
+                  },
+                ),
+                SizedBox(height: 20),
+                Text(
+                    style: TextStyle(fontSize: 18.0),
+                    'Your age in months: $_ageInMonths'),
+                SizedBox(height: 20),
+                Text(
+                    style: TextStyle(fontSize: 18.0),
+                    'Your age in weeks: $_ageInWeeks'),
+                SizedBox(height: 20),
+                Text(
+                    style: TextStyle(fontSize: 18.0),
+                    'Your age in minutes: $_ageInMinutes'),
+                SizedBox(height: 20),
+                Text(
+                    style: TextStyle(fontSize: 18.0),
+                    'Your age in seconds: $_ageInSeconds'),
+                SizedBox(height: 20),
+                Expanded(
+                  child: GridView.count(
+                    crossAxisCount: 52,
+                    children: squares,
                 ),
               ),
               SizedBox(height: 20),
