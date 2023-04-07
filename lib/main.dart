@@ -1,90 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-//
-// void main() => runApp(MaterialApp(home: LifeTracker()));
-//
-// class LifeTracker extends StatefulWidget {
-//   const LifeTracker({super.key});
-//
-//   @override
-//   _LifeTrackerState createState() => _LifeTrackerState();
-// }
-//
-// class _LifeTrackerState extends State<LifeTracker> {
-//   int _ageInWeeks = 0;
-//   int _ageInMonths = 0;
-//   final int _averageLifeExpectancyInWeeks = 4160; // 80 years in weeks
-//   final int _averageLifeExpectancyInMonths = 960; // 80 years in months
-//
-//   void _updateAgeInWeeks(DateTime birthdate) {
-//     Duration age = DateTime.now().difference(birthdate);
-//     int ageInWeeks = (age.inDays / 7).floor();
-//     int ageInMonths = (age.inDays / 7).floor();
-//
-//     setState(() {
-//       _ageInWeeks = ageInWeeks;
-//       _ageInMonths = ageInMonths;
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     List<Widget> squares = [];
-//     for (int i = 0; i < _averageLifeExpectancyInWeeks; i++) {
-//       Color? color = Colors.grey[200];
-//       if (i < _ageInWeeks) {
-//         color = Colors.blue;
-//       }
-//       squares.add(
-//         Container(
-//           width: 10,
-//           height: 10,
-//           margin: const EdgeInsets.all(1),
-//           decoration: BoxDecoration(
-//             color: color,
-//             borderRadius: BorderRadius.circular(1),
-//           ),
-//         ),
-//       );
-//     }
-//
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Life Tracker'),
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(20),
-//         child: Column(
-//           children: [
-//             ElevatedButton(
-//                 onPressed: () async {
-//                   DateTime? selectedDate = await DatePicker.showDatePicker(
-//                       context,
-//                       showTitleActions: true,
-//                       minTime: DateTime(1900),
-//                       maxTime: DateTime.now(), onChanged: (date) {
-//                     print('change $date');
-//                   }, onConfirm: (date) {
-//                     print('confirm $date');
-//                   }, currentTime: DateTime.now(), locale: LocaleType.en);
-//                   _updateAgeInWeeks(selectedDate!);
-//                 },
-//                 child: const Text(
-//                   'Select your birthdate',
-//                 )),
-//             Expanded(
-//               child: GridView.count(
-//                 scrollDirection: Axis.horizontal,
-//                 crossAxisCount: 52,
-//                 children: squares,
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 import 'package:flutter/material.dart';
 
@@ -169,13 +82,13 @@ class _LifeTrackerState extends State<LifeTracker> {
               },
             ),
             SizedBox(height: 20),
-            Text('Age in weeks: $_ageInWeeks'),
+            Text(textAlign: TextAlign.start,'Your age in weeks: $_ageInWeeks'),
             SizedBox(height: 20),
-            Text('Age in months: $_ageInMonths'),
+            Text('Your age in months: $_ageInMonths'),
             SizedBox(height: 20),
-            Text('Age in minutes: $_ageInMinutes'),
+            Text('Your age in minutes: $_ageInMinutes'),
             SizedBox(height: 20),
-            Text('Age in seconds: $_ageInSeconds'),
+            Text('Your age in seconds: $_ageInSeconds'),
             SizedBox(height: 20),
             Expanded(
               child: GridView.count(
