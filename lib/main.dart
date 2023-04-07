@@ -1,64 +1,63 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MaterialApp(home: LifeTracker()));
+void main() => runApp(const MaterialApp(home: LifeTracker()));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: LifeTracker(),
     );
   }
 }
 
 class LifeTracker extends StatefulWidget {
+  const LifeTracker({super.key});
+
   @override
   _LifeTrackerState createState() => _LifeTrackerState();
 }
 
 class _LifeTrackerState extends State<LifeTracker> {
-  int _ageInWeeks = 0;
-  int _averageLifeExpectancyInWeeks = 4160; // 80 years in weeks
-
-  void _updateAgeInWeeks(DateTime birthdate) {
-    Duration age = DateTime.now().difference(birthdate);
-    int ageInWeeks = (age.inDays / 7).floor();
-    setState(() {
-      _ageInWeeks = ageInWeeks;
-    });
-  }
+  final int _averageLifeExpectancyInMonths = 1200; // 100 years in months
 
   void _updateAgeInOtherUnits(DateTime birthdate) {
     Duration age = DateTime.now().difference(birthdate);
     int ageInMonths = age.inDays ~/ 30;
+    int ageInWeeks = (age.inDays / 7).floor();
+    int ageInDays = age.inDays;
     int ageInMinutes = age.inMinutes;
     int ageInSeconds = age.inSeconds;
     setState(() {
       _ageInMonths = ageInMonths;
+      _ageInWeeks = ageInWeeks;
+      _ageInDays = ageInDays;
       _ageInMinutes = ageInMinutes;
       _ageInSeconds = ageInSeconds;
     });
   }
 
   int _ageInMonths = 0;
+  int _ageInWeeks = 0;
+  int _ageInDays = 0;
   int _ageInMinutes = 0;
   int _ageInSeconds = 0;
 
   @override
   Widget build(BuildContext context) {
     List<Widget> squares = [];
-    for (int i = 0; i < _averageLifeExpectancyInWeeks; i++) {
+    for (int i = 0; i < _averageLifeExpectancyInMonths; i++) {
       Color? color = Colors.grey[200];
-      if (i < _ageInWeeks) {
+      if (i < _ageInMonths) {
         color = Colors.blue;
       }
       squares.add(
         Container(
           width: 10,
           height: 10,
-          margin: EdgeInsets.all(2),
+          margin: const EdgeInsets.all(2),
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(2),
@@ -74,7 +73,7 @@ class _LifeTrackerState extends State<LifeTracker> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -88,38 +87,41 @@ class _LifeTrackerState extends State<LifeTracker> {
                       firstDate: DateTime(1900),
                       lastDate: DateTime.now(),
                     );
-                    _updateAgeInWeeks(selectedDate!);
-                    _updateAgeInOtherUnits(selectedDate);
+                    _updateAgeInOtherUnits(selectedDate!);
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
-                    style: TextStyle(fontSize: 18.0),
+                    style: const TextStyle(fontSize: 18.0),
                     'Your age in months: $_ageInMonths'),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
-                    style: TextStyle(fontSize: 18.0),
+                    style: const TextStyle(fontSize: 18.0),
                     'Your age in weeks: $_ageInWeeks'),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
-                    style: TextStyle(fontSize: 18.0),
+                    style: const TextStyle(fontSize: 18.0),
+                    'Your age in days: $_ageInDays'),
+                const SizedBox(height: 20),
+                Text(
+                    style: const TextStyle(fontSize: 18.0),
                     'Your age in minutes: $_ageInMinutes'),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
-                    style: TextStyle(fontSize: 18.0),
+                    style: const TextStyle(fontSize: 18.0),
                     'Your age in seconds: $_ageInSeconds'),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Expanded(
                   child: GridView.count(
-                    crossAxisCount: 52,
+                    crossAxisCount: 24,
                     children: squares,
+                  ),
                 ),
-              ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
-                  style: TextStyle(fontSize: 18.0),
+                  style: const TextStyle(fontSize: 18.0),
                   '$percentCompleteRounded% of average life expectancy'),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               LinearProgressIndicator(value: percentComplete),
             ],
           ),
