@@ -1,13 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MaterialApp(home: LifeTracker()));
+void main() => runApp(const CupertinoApp(home: LifeTracker()));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return const CupertinoApp(
       home: LifeTracker(),
     );
   }
@@ -20,8 +21,12 @@ class LifeTracker extends StatefulWidget {
   _LifeTrackerState createState() => _LifeTrackerState();
 }
 
+
+
+
 class _LifeTrackerState extends State<LifeTracker> {
-  final int _averageLifeExpectancyInMonths = 1200; // 100 years in months
+
+
 
   void _updateAgeInOtherUnits(DateTime birthdate) {
     Duration age = DateTime.now().difference(birthdate);
@@ -39,6 +44,7 @@ class _LifeTrackerState extends State<LifeTracker> {
     });
   }
 
+  final int _averageLifeExpectancyInMonths = 1200; // 100 years in months
   int _ageInMonths = 0;
   int _ageInWeeks = 0;
   int _ageInDays = 0;
@@ -69,117 +75,122 @@ class _LifeTrackerState extends State<LifeTracker> {
     int percentCompleteRounded = (percentComplete * 100).round();
 
     return DefaultTabController(
-      length: 3,
-      initialIndex: 1,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Life Tracker'),
-          bottom: const TabBar(
-            tabs: <Widget>[
-              Tab(
-                icon: Icon(Icons.access_time),
+        length: 3,
+        initialIndex: 0,
+        child: CupertinoTabScaffold(
+          tabBar: CupertinoTabBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(CupertinoIcons.time),
+                label: 'Metrics',
               ),
-              Tab(
-                icon: Icon(Icons.grid_view_sharp),
+              BottomNavigationBarItem(
+                icon: Icon(CupertinoIcons.square_grid_2x2),
+                label: 'Blocks',
               ),
-              Tab(
-                icon: Icon(Icons.percent),
+              BottomNavigationBarItem(
+                icon: Icon(CupertinoIcons.percent),
+                label: 'Percent',
               ),
             ],
           ),
-        ),
-        body: TabBarView(
-          children: 
-          <Widget>[
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        child: const Text('Select your birthdate'),
-                        onPressed: () async {
-                          DateTime? selectedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime.now(),
-                          );
-                          _updateAgeInOtherUnits(selectedDate!);
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                          style: const TextStyle(fontSize: 18.0),
-                          'Your age in months: $_ageInMonths'),
-                      const SizedBox(height: 20),
-                      Text(
-                          style: const TextStyle(fontSize: 18.0),
-                          'Your age in weeks: $_ageInWeeks'),
-                      const SizedBox(height: 20),
-                      Text(
-                          style: const TextStyle(fontSize: 18.0),
-                          'Your age in days: $_ageInDays'),
-                      const SizedBox(height: 20),
-                      Text(
-                          style: const TextStyle(fontSize: 18.0),
-                          'Your age in minutes: $_ageInMinutes'),
-                      const SizedBox(height: 20),
-                      Text(
-                          style: const TextStyle(fontSize: 18.0),
-                          'Your age in seconds: $_ageInSeconds'),
-                      const SizedBox(height: 20),
-
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-
-                      Expanded(
-                        child: GridView.count(
-                          crossAxisCount: 36,
-                          children: squares,
+          tabBuilder: (BuildContext context, int index) {
+            return CupertinoTabView(
+              builder: (BuildContext context) {
+                return Center(
+                  child: TabBarView(
+                    children: <Widget>[
+                      SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  child: const Text('Select your birthdate'),
+                                  onPressed: () async {
+                                    DateTime? selectedDate =
+                                    await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(1900),
+                                      lastDate: DateTime.now(),
+                                    );
+                                    _updateAgeInOtherUnits(selectedDate!);
+                                  },
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                    style: const TextStyle(fontSize: 18.0),
+                                    'Your age in months: $_ageInMonths'),
+                                const SizedBox(height: 20),
+                                Text(
+                                    style: const TextStyle(fontSize: 18.0),
+                                    'Your age in weeks: $_ageInWeeks'),
+                                const SizedBox(height: 20),
+                                Text(
+                                    style: const TextStyle(fontSize: 18.0),
+                                    'Your age in days: $_ageInDays'),
+                                const SizedBox(height: 20),
+                                Text(
+                                    style: const TextStyle(fontSize: 18.0),
+                                    'Your age in minutes: $_ageInMinutes'),
+                                const SizedBox(height: 20),
+                                Text(
+                                    style: const TextStyle(fontSize: 18.0),
+                                    'Your age in seconds: $_ageInSeconds'),
+                                const SizedBox(height: 20),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-
-
+                      SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: GridView.count(
+                                    crossAxisCount: 36,
+                                    children: squares,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                    style: const TextStyle(fontSize: 18.0),
+                                    '$percentCompleteRounded% of average life expectancy'),
+                                const SizedBox(height: 10),
+                                LinearProgressIndicator(
+                                  value: percentComplete,
+                                  minHeight: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ),
-            ),
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-
-                      Text(
-                          style: const TextStyle(fontSize: 18.0),
-                          '$percentCompleteRounded% of average life expectancy'),
-                      const SizedBox(height: 10),
-                      LinearProgressIndicator(value: percentComplete,minHeight: 20,),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-
-        ),
-      ),
-    );
+                );
+              },
+            );
+          },
+        ));
   }
 }
+
