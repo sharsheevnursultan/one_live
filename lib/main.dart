@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MaterialApp(home: LifeTracker()));
@@ -8,7 +7,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CupertinoApp(
+    return const MaterialApp(
       home: LifeTracker(),
     );
   }
@@ -27,21 +26,24 @@ class _LifeTrackerState extends State<LifeTracker> {
     int ageInMonths = age.inDays ~/ 30;
     int ageInWeeks = (age.inDays / 7).floor();
     int ageInDays = age.inDays;
+    int ageInHours = age.inHours;
     int ageInMinutes = age.inMinutes;
     int ageInSeconds = age.inSeconds;
     setState(() {
       _ageInMonths = ageInMonths;
       _ageInWeeks = ageInWeeks;
       _ageInDays = ageInDays;
+      _ageInHours = ageInHours;
       _ageInMinutes = ageInMinutes;
       _ageInSeconds = ageInSeconds;
     });
   }
 
-  final int _averageLifeExpectancyInMonths = 1200; // 100 years in months
+  final int _averageLifeExpectancyInMonths = 876; // 73 years in months
   int _ageInMonths = 0;
   int _ageInWeeks = 0;
   int _ageInDays = 0;
+  int _ageInHours = 0;
   int _ageInMinutes = 0;
   int _ageInSeconds = 0;
 
@@ -65,22 +67,22 @@ class _LifeTrackerState extends State<LifeTracker> {
         ),
       );
     }
-    double percentComplete = _ageInSeconds / (80 * 365 * 24 * 60 * 60);
+    double percentComplete = _ageInSeconds / (73 * 365 * 24 * 60 * 60);
     int percentCompleteRounded = (percentComplete * 100).round();
 
     return DefaultTabController(
         length: 3,
-        initialIndex: 1,
+        initialIndex: 0,
         child: Scaffold(
             appBar: AppBar(
-              title: const Text('Life Tracker'),
+              title: const Text('One Life - Life Tracker'),
               bottom: const TabBar(
                 tabs: <Widget>[
                   Tab(
                     icon: Icon(Icons.access_time),
                   ),
                   Tab(
-                    icon: Icon(Icons.grid_view_sharp),
+                    icon: Icon(Icons.grid_view),
                   ),
                   Tab(
                     icon: Icon(Icons.percent),
@@ -97,6 +99,9 @@ class _LifeTrackerState extends State<LifeTracker> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          const Text(
+                              'Select your birthday to find out your life data'),
+                          const SizedBox(height: 30),
                           ElevatedButton(
                             child: const Text('Select your birthdate'),
                             onPressed: () async {
@@ -109,26 +114,55 @@ class _LifeTrackerState extends State<LifeTracker> {
                               _updateAgeInOtherUnits(selectedDate!);
                             },
                           ),
+                          const SizedBox(height: 30),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Your age in months:'),
+                              Text('$_ageInMonths'),
+                            ],
+                          ),
                           const SizedBox(height: 20),
-                          Text(
-                              style: const TextStyle(fontSize: 18.0),
-                              'Your age in months: $_ageInMonths'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Your age in weeks:'),
+                              Text('$_ageInWeeks'),
+                            ],
+                          ),
                           const SizedBox(height: 20),
-                          Text(
-                              style: const TextStyle(fontSize: 18.0),
-                              'Your age in weeks: $_ageInWeeks'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Your age in days:'),
+                              Text('$_ageInDays'),
+                            ],
+                          ),
                           const SizedBox(height: 20),
-                          Text(
-                              style: const TextStyle(fontSize: 18.0),
-                              'Your age in days: $_ageInDays'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Your age in hours:'),
+                              Text('$_ageInHours'),
+                            ],
+                          ),
                           const SizedBox(height: 20),
-                          Text(
-                              style: const TextStyle(fontSize: 18.0),
-                              'Your age in minutes: $_ageInMinutes'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Your age in minutes:'),
+                              Text('$_ageInMinutes'),
+                            ],
+                          ),
                           const SizedBox(height: 20),
-                          Text(
-                              style: const TextStyle(fontSize: 18.0),
-                              'Your age in seconds: $_ageInSeconds'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Your age in seconds:'),
+                              Text('$_ageInSeconds'),
+                            ],
+                          ),
+
                           const SizedBox(height: 20),
                         ],
                       ),
@@ -142,6 +176,11 @@ class _LifeTrackerState extends State<LifeTracker> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              const Text(
+                                  'Life of an average person in months.'),
+                              const Text(
+                                  'One line equals 3 years'),
+                              const SizedBox(height: 30),
                               Expanded(
                                 child: GridView.count(
                                   crossAxisCount: 36,
@@ -158,8 +197,10 @@ class _LifeTrackerState extends State<LifeTracker> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          const Text(
+                              'According to the WHO, the average life expectancy worldwide is 73 years'),
+                          const SizedBox(height: 30),
                           Text(
-                              style: const TextStyle(fontSize: 18.0),
                               '$percentCompleteRounded% of average life expectancy'),
                           const SizedBox(height: 10),
                           LinearProgressIndicator(
