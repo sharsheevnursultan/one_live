@@ -1,14 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const MainPage(),
-        '/in': (context) => const LifeTracker(),
-      },
-      // home: LifeTracker()
-    ));
+void main() => runApp(
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const MainPage(),
+          '/in': (context) => const LifeTracker(),
+        },
+      ),
+    );
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -39,34 +41,23 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: SafeArea(
-      child: Scaffold(
-        body: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              child: const Text('Select your birthdate'),
-              onPressed: () async {
-                DateTime? selectedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(1900),
-                  lastDate: DateTime.now(),
-                );
-                // _updateAgeInOtherUnits(selectedDate!);
-              },
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/in');
-              },
-              child: const Text('Next'),
-            ),
-          ],
-        )),
-      ),
-    ));
+          child: Scaffold(
+            body: Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/in');
+                  },
+                  child: const Text('Next'),
+                ),
+              ],
+            )),
+          ),
+        ));
   }
 }
 
@@ -96,7 +87,7 @@ class _LifeTrackerState extends State<LifeTracker> {
   int _ageInHours = 0;
   int _ageInMinutes = 0;
   int _ageInSeconds = 0;
-
+  DateTime date = DateTime(2000, 10, 26);
   @override
   Widget build(BuildContext context) {
     List<Widget> squares = [];
@@ -119,6 +110,30 @@ class _LifeTrackerState extends State<LifeTracker> {
     }
     double percentComplete = _ageInSeconds / (73 * 365 * 24 * 60 * 60);
     int percentCompleteRounded = (percentComplete * 100).round();
+
+
+    // This function displays a CupertinoModalPopup with a reasonable fixed height
+    // which hosts CupertinoDatePicker.
+    void _showDialog(Widget child) {
+      showCupertinoModalPopup<void>(
+          context: context,
+          builder: (BuildContext context) => Container(
+                height: 216,
+                padding: const EdgeInsets.only(top: 6.0),
+                // The Bottom margin is provided to align the popup above the system
+                // navigation bar.
+                margin: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                // Provide a background color for the popup.
+                color: CupertinoColors.systemBackground.resolveFrom(context),
+                // Use a SafeArea widget to avoid system overlaps.
+                child: SafeArea(
+                  top: false,
+                  child: child,
+                ),
+              ));
+    }
 
     return DefaultTabController(
         length: 3,
@@ -152,17 +167,32 @@ class _LifeTrackerState extends State<LifeTracker> {
                           const Text(
                               'Select your birthday to find out your life data'),
                           const SizedBox(height: 30),
-                          ElevatedButton(
-                            child: const Text('Select your birthdate'),
-                            onPressed: () async {
-                              DateTime? selectedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime.now(),
-                              );
-                              _updateAgeInOtherUnits(selectedDate!);
-                            },
+                          SizedBox(
+                            height: 100,
+                            child: CupertinoButton(
+                              // Display a CupertinoDatePicker in date picker mode.
+                              onPressed: () => _showDialog(
+                                CupertinoDatePicker(
+                                  initialDateTime: date,
+                                  mode: CupertinoDatePickerMode.date,
+                                  use24hFormat: true,
+                                  // This is called when the user changes the date.
+                                  onDateTimeChanged: (DateTime newDate) {
+                                    date = newDate;
+                                    _updateAgeInOtherUnits(date);
+                                  },
+                                ),
+                              ),
+                              // In this example, the date is formatted manually. You can
+                              // use the intl package to format the value based on the
+                              // user's locale settings.
+                              child: Text(
+                                '${date.month}-${date.day}-${date.year}',
+                                style: const TextStyle(
+                                  fontSize: 22.0,
+                                ),
+                              ),
+                            ),
                           ),
                           const SizedBox(height: 30),
                           Row(
