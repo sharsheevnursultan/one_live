@@ -87,7 +87,8 @@ class _LifeTrackerState extends State<LifeTracker> {
   int _ageInHours = 0;
   int _ageInMinutes = 0;
   int _ageInSeconds = 0;
-  DateTime date = DateTime(2000, 10, 26);
+  DateTime date = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     List<Widget> squares = [];
@@ -167,38 +168,59 @@ class _LifeTrackerState extends State<LifeTracker> {
                           const Text(
                               'Select your birthday to find out your life data'),
                           const SizedBox(height: 30),
-                          SizedBox(
-                            height: 100,
-                            child: CupertinoButton(
-                              // Display a CupertinoDatePicker in date picker mode.
-                              onPressed: () => _showDialog(
-                                CupertinoDatePicker(
-                                  initialDateTime: date,
-                                  mode: CupertinoDatePickerMode.date,
-                                  use24hFormat: true,
-                                  // This is called when the user changes the date.
-                                  onDateTimeChanged: (DateTime newDate) {
-                                    date = newDate;
-                                    _updateAgeInOtherUnits(date);
-                                  },
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${date.month}.${date.day}.${date.year}',
+                                style: TextStyle(
+                                  fontSize: 40,
+                                  color: Colors.blue,
                                 ),
                               ),
-                              // In this example, the date is formatted manually. You can
-                              // use the intl package to format the value based on the
-                              // user's locale settings.
-                              child: Text(
-                                '${date.month}-${date.day}-${date.year}',
-                                style: const TextStyle(
-                                  fontSize: 22.0,
+                              ElevatedButton(
+                                // Display a CupertinoDatePicker in date picker mode.
+                                onPressed: () => _showDialog(
+                                  CupertinoDatePicker(
+                                    initialDateTime: date,
+                                    mode: CupertinoDatePickerMode.date,
+                                    use24hFormat: true,
+                                    minimumYear: 1900,
+                                    // This is called when the user changes the date.
+                                    onDateTimeChanged: (DateTime newDate) {
+                                      date = newDate;
+                                      _updateAgeInOtherUnits(date);
+                                    },
+                                  ),
+                                ),
+                                // In this example, the date is formatted manually. You can
+                                // use the intl package to format the value based on the
+                                // user's locale settings.
+                                child: const Text(
+                                  "Enter date",
                                 ),
                               ),
-                            ),
+                            ],
                           ),
                           const SizedBox(height: 30),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Your age in months:'),
+                              Text(
+                                'Your age in:',
+                                style: TextStyle(
+                                  fontSize: 40,
+                                  color: Colors.grey[500],
+                                ),
+                              ),
+                              Text(''),
+                            ],
+                          ),
+                          const SizedBox(height: 30),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('months:'),
                               Text('$_ageInMonths'),
                             ],
                           ),
@@ -206,7 +228,7 @@ class _LifeTrackerState extends State<LifeTracker> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Your age in weeks:'),
+                              const Text('weeks:'),
                               Text('$_ageInWeeks'),
                             ],
                           ),
@@ -214,7 +236,7 @@ class _LifeTrackerState extends State<LifeTracker> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Your age in days:'),
+                              const Text('days:'),
                               Text('$_ageInDays'),
                             ],
                           ),
@@ -222,7 +244,7 @@ class _LifeTrackerState extends State<LifeTracker> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Your age in hours:'),
+                              const Text('hours:'),
                               Text('$_ageInHours'),
                             ],
                           ),
@@ -230,7 +252,7 @@ class _LifeTrackerState extends State<LifeTracker> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Your age in minutes:'),
+                              const Text('minutes:'),
                               Text('$_ageInMinutes'),
                             ],
                           ),
@@ -238,7 +260,7 @@ class _LifeTrackerState extends State<LifeTracker> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Your age in seconds:'),
+                              const Text('seconds:'),
                               Text('$_ageInSeconds'),
                             ],
                           ),
