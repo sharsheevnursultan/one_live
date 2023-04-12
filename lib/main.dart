@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MaterialApp(home: LifeTracker()));
+void main() => runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MainPage(),
+        '/in': (context) => const LifeTracker(),
+      },
+      // home: LifeTracker()
+    ));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -18,6 +26,48 @@ class LifeTracker extends StatefulWidget {
 
   @override
   _LifeTrackerState createState() => _LifeTrackerState();
+}
+
+class MainPage extends StatefulWidget {
+  const MainPage({Key? key}) : super(key: key);
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        home: SafeArea(
+      child: Scaffold(
+        body: Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: const Text('Select your birthdate'),
+              onPressed: () async {
+                DateTime? selectedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                );
+                // _updateAgeInOtherUnits(selectedDate!);
+              },
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/in');
+              },
+              child: const Text('Next'),
+            ),
+          ],
+        )),
+      ),
+    ));
+  }
 }
 
 class _LifeTrackerState extends State<LifeTracker> {
@@ -162,7 +212,6 @@ class _LifeTrackerState extends State<LifeTracker> {
                               Text('$_ageInSeconds'),
                             ],
                           ),
-
                           const SizedBox(height: 20),
                         ],
                       ),
@@ -178,8 +227,7 @@ class _LifeTrackerState extends State<LifeTracker> {
                             children: [
                               const Text(
                                   'Life of an average person in months.'),
-                              const Text(
-                                  'One line equals 3 years'),
+                              const Text('One line equals 3 years'),
                               const SizedBox(height: 30),
                               Expanded(
                                 child: GridView.count(
@@ -213,10 +261,6 @@ class _LifeTrackerState extends State<LifeTracker> {
                   ),
                 ),
               ],
-            )
-        )
-    );
+            )));
   }
 }
-
-
