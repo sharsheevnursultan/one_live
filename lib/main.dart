@@ -1,24 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(
-      MaterialApp(
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const MainPage(),
-          '/in': (context) => const LifeTracker(),
-        },
-      ),
-    );
+void main() {
+  runApp(
+    const MyApp(),
+  );
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: LifeTracker(),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MainPage(),
+        '/in': (context) => const LifeTracker(),
+      },
+      home: const LifeTracker(),
     );
   }
 }
@@ -45,16 +46,22 @@ class _MainPageState extends State<MainPage> {
         home: SafeArea(
           child: Scaffold(
             body: Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/in');
-                  },
-                  child: const Text('Next'),
-                ),
-              ],
+                child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                      'The One Life app is designed to help you get to know your life better by displaying information about how much time you have already lived, and displaying this data in the form of numbers and tables.'),
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/in');
+                    },
+                    child: const Text('Next'),
+                  ),
+                ],
+              ),
             )),
           ),
         ));
@@ -64,6 +71,7 @@ class _MainPageState extends State<MainPage> {
 class _LifeTrackerState extends State<LifeTracker> {
   void _updateAgeInOtherUnits(DateTime birthdate) {
     Duration age = DateTime.now().difference(birthdate);
+    int ageInYears = age.inDays ~/ 365;
     int ageInMonths = age.inDays ~/ 30;
     int ageInWeeks = (age.inDays / 7).floor();
     int ageInDays = age.inDays;
@@ -71,6 +79,7 @@ class _LifeTrackerState extends State<LifeTracker> {
     int ageInMinutes = age.inMinutes;
     int ageInSeconds = age.inSeconds;
     setState(() {
+      _ageInYears = ageInYears;
       _ageInMonths = ageInMonths;
       _ageInWeeks = ageInWeeks;
       _ageInDays = ageInDays;
@@ -81,6 +90,7 @@ class _LifeTrackerState extends State<LifeTracker> {
   }
 
   final int _averageLifeExpectancyInMonths = 876; // 73 years in months
+  int _ageInYears = 0;
   int _ageInMonths = 0;
   int _ageInWeeks = 0;
   int _ageInDays = 0;
@@ -173,7 +183,7 @@ class _LifeTrackerState extends State<LifeTracker> {
                             children: [
                               Text(
                                 '${date.month}.${date.day}.${date.year}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 40,
                                   color: Colors.blue,
                                 ),
@@ -213,10 +223,18 @@ class _LifeTrackerState extends State<LifeTracker> {
                                   color: Colors.grey[500],
                                 ),
                               ),
-                              Text(''),
+                              const Text(''),
                             ],
                           ),
                           const SizedBox(height: 30),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('years:'),
+                              Text('$_ageInYears'),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
