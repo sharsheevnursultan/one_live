@@ -2,7 +2,7 @@
     package="com.nomaddev.one_live">
    <application
 
-        android:label="one_live"
+        android:label="One Life - Life Tracker"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

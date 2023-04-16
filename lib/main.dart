@@ -92,7 +92,7 @@ class _LifeTrackerState extends State<LifeTracker> {
   Widget build(BuildContext context) {
     List<Widget> squares = [];
     for (int i = 0; i < _averageLifeExpectancyInMonths; i++) {
-      Color? color = Colors.white;
+      Color? color = const Color(0xffB3DDC6);
       if (i < _ageInMonths) {
         color = const Color(0xff2c2c2c);
       }
