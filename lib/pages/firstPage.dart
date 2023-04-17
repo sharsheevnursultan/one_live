@@ -69,7 +69,7 @@ class _MainPageState extends State<MainPage> {
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/main');
-                        },
+                            },
                         child: const Text(
                           'Next',
                           style: TextStyle(fontSize: 20),

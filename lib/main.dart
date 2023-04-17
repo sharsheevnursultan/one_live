@@ -1,40 +1,53 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'pages/firstPage.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   runApp(
     const MyApp(),
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-          fontFamily: 'Montserrat',
-          elevatedButtonTheme: (ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  backgroundColor: const Color(0xffB3DDC6)))),
-          buttonTheme: const ButtonThemeData(buttonColor: Color(0xffB3DDC6)),
-          textTheme:
-              const TextTheme(bodyText2: TextStyle(color: Color(0xff2c2c2c))),
-          appBarTheme: const AppBarTheme(
-            color: Color(0xfffaf7ed),
-            iconTheme: IconThemeData(color: Colors.black),
-            toolbarTextStyle: TextStyle(color: Color(0xff2c2c2c)),
-            titleTextStyle: TextStyle(color: Color(0xff2c2c2c), fontSize: 20),
-          ),
-          primaryColor: const Color(0xfffaf7ed),
-          scaffoldBackgroundColor: const Color(0xfffaf7ed),
-          colorScheme: ColorScheme.fromSwatch()
-              .copyWith(secondary: const Color(0xffB3DDC6)),
-          ),
+        fontFamily: 'Montserrat',
+        elevatedButtonTheme: (ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.black,
+                backgroundColor: const Color(0xffB3DDC6)))),
+        buttonTheme: const ButtonThemeData(buttonColor: Color(0xffB3DDC6)),
+        textTheme:
+            const TextTheme(bodyText2: TextStyle(color: Color(0xff2c2c2c))),
+        appBarTheme: const AppBarTheme(
+          color: Color(0xfffaf7ed),
+          iconTheme: IconThemeData(color: Colors.black),
+          toolbarTextStyle: TextStyle(color: Color(0xff2c2c2c)),
+          titleTextStyle: TextStyle(color: Color(0xff2c2c2c), fontSize: 20),
+        ),
+        primaryColor: const Color(0xfffaf7ed),
+        scaffoldBackgroundColor: const Color(0xfffaf7ed),
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(secondary: const Color(0xffB3DDC6)),
+      ),
       debugShowCheckedModeBanner: false,
       // theme: ThemeData.dark(),
       initialRoute: '/firstPage',
@@ -58,6 +71,29 @@ class LifeTracker extends StatefulWidget {
 
 
 class _LifeTrackerState extends State<LifeTracker> {
+  InterstitialAd? _interstitialAd;
+  bool _isInterstitialAdReady = false;
+
+  void _showInterstitialAd() {
+    if (_isInterstitialAdReady) {
+      _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          _createInterstitialAd();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          _createInterstitialAd();
+        },
+      );
+      _interstitialAd!.show();
+      _isInterstitialAdReady=false;
+
+    }else{
+      print('Interstitial ad is not ready yet.');
+    }
+  }
+
   void _updateAgeInOtherUnits(DateTime birthdate) {
     Duration age = DateTime.now().difference(birthdate);
     int ageInYears = age.inDays ~/ 365;
@@ -89,6 +125,24 @@ class _LifeTrackerState extends State<LifeTracker> {
   DateTime date = DateTime.now();
 
   @override
+  void initState() {
+    super.initState();
+    _createInterstitialAd();
+  }
+
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: 'ca-app-pub-3940256099942544/4411468910',
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) => setState(() {
+            _interstitialAd = ad;
+            _isInterstitialAdReady = true;
+          }),
+          onAdFailedToLoad: (LoadAdError error) => print('InterstitialAd failed to load: $error'),
+        ));
+  }
+
   Widget build(BuildContext context) {
     List<Widget> squares = [];
     for (int i = 0; i < _averageLifeExpectancyInMonths; i++) {
@@ -167,6 +221,10 @@ class _LifeTrackerState extends State<LifeTracker> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            // ElevatedButton(),
+                            // onPressed: Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyApp(_showInterstitialAd()))),
+                            //   onPressed: _showInterstitialAd(),
+                            //   child: Text('Admob')),
                             const Text(
                                 'Select your birthday to find out your life data'),
                             const SizedBox(height: 30),
@@ -203,6 +261,9 @@ class _LifeTrackerState extends State<LifeTracker> {
                                     "Enter date",
                                   ),
                                 ),
+                                ElevatedButton(
+                                    onPressed: _showInterstitialAd,
+                                    child: Text('text'))
                               ],
                             ),
                             const SizedBox(height: 30),
