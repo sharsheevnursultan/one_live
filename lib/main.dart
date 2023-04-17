@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-
 import 'pages/firstPage.dart';
 
 void main() {
@@ -64,17 +63,14 @@ class LifeTracker extends StatefulWidget {
   const LifeTracker({super.key});
 
   @override
-  _LifeTrackerState createState() => _LifeTrackerState();
+  LifeTrackerState createState() => LifeTrackerState();
 }
 
-
-
-
-class _LifeTrackerState extends State<LifeTracker> {
-  InterstitialAd? _interstitialAd;
+class LifeTrackerState extends State<LifeTracker> {
+  late InterstitialAd? _interstitialAd;
   bool _isInterstitialAdReady = false;
 
-  void _showInterstitialAd() {
+  void showInterstitialAd() {
     if (_isInterstitialAdReady) {
       _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdDismissedFullScreenContent: (ad) {
@@ -87,9 +83,8 @@ class _LifeTrackerState extends State<LifeTracker> {
         },
       );
       _interstitialAd!.show();
-      _isInterstitialAdReady=false;
-
-    }else{
+      _isInterstitialAdReady = false;
+    } else {
       print('Interstitial ad is not ready yet.');
     }
   }
@@ -132,17 +127,19 @@ class _LifeTrackerState extends State<LifeTracker> {
 
   void _createInterstitialAd() {
     InterstitialAd.load(
-        adUnitId: 'ca-app-pub-3940256099942544/4411468910',
-        request: AdRequest(),
+        adUnitId: 'ca-app-pub-2550588570628296/1296225985',
+        request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (ad) => setState(() {
             _interstitialAd = ad;
             _isInterstitialAdReady = true;
           }),
-          onAdFailedToLoad: (LoadAdError error) => print('InterstitialAd failed to load: $error'),
+          onAdFailedToLoad: (LoadAdError error) =>
+              print('InterstitialAd failed to load: $error'),
         ));
   }
 
+  @override
   Widget build(BuildContext context) {
     List<Widget> squares = [];
     for (int i = 0; i < _averageLifeExpectancyInMonths; i++) {
@@ -164,7 +161,6 @@ class _LifeTrackerState extends State<LifeTracker> {
     }
     double percentComplete = _ageInSeconds / (73 * 365 * 24 * 60 * 60);
     int percentCompleteRounded = (percentComplete * 100).round();
-
 
     // This function displays a CupertinoModalPopup with a reasonable fixed height
     // which hosts CupertinoDatePicker.
@@ -193,10 +189,11 @@ class _LifeTrackerState extends State<LifeTracker> {
         length: 3,
         initialIndex: 0,
         child: Scaffold(
-            resizeToAvoidBottomInset : false,
+            resizeToAvoidBottomInset: false,
             backgroundColor: const Color(0xfffaf7ed),
             appBar: AppBar(
-              title: const Text('One Life - Life Tracker', style: TextStyle(fontFamily: "BakbakOne")),
+              title: const Text('One Life - Life Tracker',
+                  style: TextStyle(fontFamily: "BakbakOne")),
               bottom: const TabBar(
                 tabs: <Widget>[
                   Tab(
@@ -240,20 +237,24 @@ class _LifeTrackerState extends State<LifeTracker> {
                                   ),
                                 ),
                                 ElevatedButton(
+                                  onPressed: () {
+                                    _showDialog(
+                                      CupertinoDatePicker(
+                                        initialDateTime: date,
+                                        mode: CupertinoDatePickerMode.date,
+                                        use24hFormat: true,
+                                        minimumYear: 1900,
+                                        // This is called when the user changes the date.
+                                        onDateTimeChanged: (DateTime newDate) {
+                                          date = newDate;
+                                          _updateAgeInOtherUnits(date);
+                                        },
+                                      ),
+                                    );
+                                    showInterstitialAd();
+                                  },
                                   // Display a CupertinoDatePicker in date picker mode.
-                                  onPressed: () => _showDialog(
-                                    CupertinoDatePicker(
-                                      initialDateTime: date,
-                                      mode: CupertinoDatePickerMode.date,
-                                      use24hFormat: true,
-                                      minimumYear: 1900,
-                                      // This is called when the user changes the date.
-                                      onDateTimeChanged: (DateTime newDate) {
-                                        date = newDate;
-                                        _updateAgeInOtherUnits(date);
-                                      },
-                                    ),
-                                  ),
+
                                   // In this example, the date is formatted manually. You can
                                   // use the intl package to format the value based on the
                                   // user's locale settings.
@@ -261,9 +262,9 @@ class _LifeTrackerState extends State<LifeTracker> {
                                     "Enter date",
                                   ),
                                 ),
-                                ElevatedButton(
-                                    onPressed: _showInterstitialAd,
-                                    child: Text('text'))
+                                // ElevatedButton(
+                                //     onPressed: showInterstitialAd,
+                                //     child: Text('text'))
                               ],
                             ),
                             const SizedBox(height: 30),
@@ -373,7 +374,7 @@ class _LifeTrackerState extends State<LifeTracker> {
                             decoration: const BoxDecoration(
                               color: Color(0xffFBF1A3),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10)),
+                                  BorderRadius.all(Radius.circular(10)),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -382,14 +383,12 @@ class _LifeTrackerState extends State<LifeTracker> {
                                     'Life of an average person in months.'),
                                 const Text('One line equals 3 years'),
                                 const SizedBox(height: 30),
-
                                 Expanded(
                                   child: GridView.count(
                                     crossAxisCount: 36,
                                     children: squares,
                                   ),
                                 ),
-
                               ],
                             ),
                           ),
@@ -403,8 +402,7 @@ class _LifeTrackerState extends State<LifeTracker> {
                           padding: const EdgeInsets.all(16.0),
                           decoration: const BoxDecoration(
                             color: Color(0xffFBF1A3),
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10)),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -428,7 +426,6 @@ class _LifeTrackerState extends State<LifeTracker> {
                     ),
                   ),
                 ),
-
               ],
             )));
   }

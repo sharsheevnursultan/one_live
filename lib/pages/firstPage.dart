@@ -12,33 +12,33 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
         theme: ThemeData(
-            elevatedButtonTheme: (ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: const Color(0xffB3DDC6),
-              ),
-            )),
-            fontFamily: 'Montserrat',
-            buttonTheme: const ButtonThemeData(buttonColor: Color(0xffB3DDC6)),
-            textTheme:
-                const TextTheme(bodyText2: TextStyle(color: Color(0xff2c2c2c))),
-            appBarTheme: const AppBarTheme(
-              color: Color(0xfffaf7ed),
-              iconTheme: IconThemeData(color: Colors.black),
-              toolbarTextStyle: TextStyle(color: Color(0xff2c2c2c)),
-              titleTextStyle: TextStyle(color: Color(0xff2c2c2c), fontSize: 20),
+          elevatedButtonTheme: (ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.black,
+              backgroundColor: const Color(0xffB3DDC6),
             ),
-            primaryColor: const Color(0xfffaf7ed),
-            scaffoldBackgroundColor: const Color(0xfffaf7ed),
-            colorScheme: ColorScheme.fromSwatch()
-                .copyWith(secondary: const Color(0xffB3DDC6)),
-            ),
+          )),
+          fontFamily: 'Montserrat',
+          buttonTheme: const ButtonThemeData(buttonColor: Color(0xffB3DDC6)),
+          textTheme:
+              const TextTheme(bodyText2: TextStyle(color: Color(0xff2c2c2c))),
+          appBarTheme: const AppBarTheme(
+            color: Color(0xfffaf7ed),
+            iconTheme: IconThemeData(color: Colors.black),
+            toolbarTextStyle: TextStyle(color: Color(0xff2c2c2c)),
+            titleTextStyle: TextStyle(color: Color(0xff2c2c2c), fontSize: 20),
+          ),
+          primaryColor: const Color(0xfffaf7ed),
+          scaffoldBackgroundColor: const Color(0xfffaf7ed),
+          colorScheme: ColorScheme.fromSwatch()
+              .copyWith(secondary: const Color(0xffB3DDC6)),
+        ),
         debugShowCheckedModeBanner: false,
-        home: SafeArea(
-          child: Scaffold(
-            resizeToAvoidBottomInset : false,
-            backgroundColor: const Color(0xfffaf7ed),
-            body: Center(
+        home: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: const Color(0xfffaf7ed),
+          body: SafeArea(
+            child: Center(
                 child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
@@ -69,12 +69,12 @@ class _MainPageState extends State<MainPage> {
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/main');
-                            },
+                          // Provider.of<LifeTrackerState>(context, listen: false).showInterstitialAd();
+                        },
                         child: const Text(
                           'Next',
                           style: TextStyle(fontSize: 20),
-                      ),
-
+                        ),
                       ),
                     ],
                   ),
