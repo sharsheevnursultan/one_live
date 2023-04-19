@@ -1,6 +1,9 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 import 'pages/firstPage.dart';
 
 void main() {
@@ -66,6 +69,17 @@ class LifeTracker extends StatefulWidget {
   LifeTrackerState createState() => LifeTrackerState();
 }
 
+class AdMobService {
+  static String? get interstitialAdUnitId {
+    if (Platform.isAndroid) {
+      return 'ca-app-pub-2550588570628296/9765381559';
+    } else if (Platform.isIOS) {
+      return 'ca-app-pub-2550588570628296/1296225985';
+    }
+    return null;
+  }
+}
+
 class LifeTrackerState extends State<LifeTracker> {
   late InterstitialAd? _interstitialAd;
   bool _isInterstitialAdReady = false;
@@ -127,7 +141,7 @@ class LifeTrackerState extends State<LifeTracker> {
 
   void _createInterstitialAd() {
     InterstitialAd.load(
-        adUnitId: 'ca-app-pub-2550588570628296/1296225985',
+        adUnitId: AdMobService.interstitialAdUnitId!,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (ad) => setState(() {
