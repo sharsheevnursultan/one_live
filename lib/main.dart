@@ -1,8 +1,12 @@
-import 'dart:io' show Platform;
+import 'dart:io' show File, Platform;
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:widgets_to_image/widgets_to_image.dart';
 
 import 'pages/firstPage.dart';
 
@@ -38,7 +42,7 @@ class _MyAppState extends State<MyApp> {
                 backgroundColor: const Color(0xffB3DDC6)))),
         buttonTheme: const ButtonThemeData(buttonColor: Color(0xffB3DDC6)),
         textTheme:
-            const TextTheme(bodyText2: TextStyle(color: Color(0xff2c2c2c))),
+            const TextTheme(bodyMedium: TextStyle(color: Color(0xff2c2c2c))),
         appBarTheme: const AppBarTheme(
           color: Color(0xfffaf7ed),
           iconTheme: IconThemeData(color: Colors.black),
@@ -83,6 +87,12 @@ class AdMobService {
 class LifeTrackerState extends State<LifeTracker> {
   late InterstitialAd? _interstitialAd;
   bool _isInterstitialAdReady = false;
+
+// WidgetsToImageController to access widget
+  WidgetsToImageController controller = WidgetsToImageController();
+
+  // to save image bytes of widget
+  Uint8List? bytes;
 
   void showInterstitialAd() {
     if (_isInterstitialAdReady) {
@@ -137,6 +147,7 @@ class LifeTrackerState extends State<LifeTracker> {
   void initState() {
     super.initState();
     _createInterstitialAd();
+    loadImage();
   }
 
   void _createInterstitialAd() {
@@ -200,7 +211,7 @@ class LifeTrackerState extends State<LifeTracker> {
     }
 
     return DefaultTabController(
-        length: 3,
+        length: 4,
         initialIndex: 0,
         child: Scaffold(
             resizeToAvoidBottomInset: false,
@@ -208,6 +219,13 @@ class LifeTrackerState extends State<LifeTracker> {
             appBar: AppBar(
               title: const Text('One Life - Life Tracker',
                   style: TextStyle(fontFamily: "BakbakOne")),
+              actions: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.ios_share),
+                  tooltip: 'Share App',
+                  onPressed: sharePressed,
+                ),
+              ],
               bottom: const TabBar(
                 tabs: <Widget>[
                   Tab(
@@ -218,6 +236,9 @@ class LifeTrackerState extends State<LifeTracker> {
                   ),
                   Tab(
                     icon: Icon(Icons.percent),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.share),
                   ),
                 ],
               ),
@@ -232,10 +253,6 @@ class LifeTrackerState extends State<LifeTracker> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // ElevatedButton(),
-                            // onPressed: Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyApp(_showInterstitialAd()))),
-                            //   onPressed: _showInterstitialAd(),
-                            //   child: Text('Admob')),
                             const Text(
                                 'Select your birthday to find out your life data'),
                             const SizedBox(height: 30),
@@ -276,9 +293,6 @@ class LifeTrackerState extends State<LifeTracker> {
                                     "Enter date",
                                   ),
                                 ),
-                                // ElevatedButton(
-                                //     onPressed: showInterstitialAd,
-                                //     child: Text('text'))
                               ],
                             ),
                             const SizedBox(height: 30),
@@ -424,8 +438,18 @@ class LifeTrackerState extends State<LifeTracker> {
                               const Text(
                                   'According to the WHO, the average life expectancy worldwide is 73 years'),
                               const SizedBox(height: 30),
-                              Text(
-                                  '$percentCompleteRounded% of average life expectancy'),
+                              Row(
+                                children: [
+                                  Text(
+                                      style: const TextStyle(
+                                        fontFamily: "BakbakOne",
+                                        fontSize: 40,
+                                        // color: Color(0xff2c2c2c),
+                                      ),
+                                      '$percentCompleteRounded% '),
+                                  const Text('of average life expectancy'),
+                                ],
+                              ),
                               const SizedBox(height: 10),
                               LinearProgressIndicator(
                                 color: const Color(0xff2c2c2c),
@@ -440,7 +464,155 @@ class LifeTrackerState extends State<LifeTracker> {
                     ),
                   ),
                 ),
+                SafeArea(
+                  child: Center(
+                    child: ListView(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Center(
+                              child: Text(
+                                  'Share your results on social networks!')),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: WidgetsToImage(
+                            controller: controller,
+                            child: SingleChildScrollView(
+                              child: SafeArea(
+                                child: Center(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(16.0),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xffFBF1A3),
+                                      // borderRadius:
+                                      //     BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                                style: TextStyle(
+                                                  fontFamily: "BakbakOne",
+                                                  fontSize: 20,
+                                                  // color: Color(0xff2c2c2c),
+                                                ),
+                                                'One Life - Life Tracker'),
+                                            Image.asset(
+                                              'assets/images/android/icon.png',
+                                              width: 80,
+                                              height: 80,
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                                'From average life expectancy'),
+                                            Text(
+                                                style: const TextStyle(
+                                                  fontFamily: "BakbakOne",
+                                                  fontSize: 40,
+                                                  // color: Color(0xff2c2c2c),
+                                                ),
+                                                '$percentCompleteRounded%'),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text('My age:'),
+                                            Text(
+                                                style: const TextStyle(
+                                                  fontFamily: "BakbakOne",
+                                                  fontSize: 40,
+                                                  // color: Color(0xff2c2c2c),
+                                                ),
+                                                '$_ageInYears'),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 10),
+                                        LinearProgressIndicator(
+                                          color: const Color(0xff2c2c2c),
+                                          backgroundColor:
+                                              const Color(0xffB3DDC6),
+                                          value: percentComplete,
+                                          minHeight: 20,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        // if (bytes != null) buildImage(bytes!),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              final bytes = await controller.capture();
+                              setState(() {
+                                this.bytes = bytes;
+                              });
+                              saveImage(this.bytes);
+                              toSocialNetworks(this.bytes);
+                            },
+                            child: const Text(
+                              'Share',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ],
             )));
+  }
+
+  // Widget buildImage(Uint8List bytes) => Image.memory(bytes);
+
+  void sharePressed() {
+    String message =
+        'https://apps.apple.com/app/one-life-life-tracker/id6447756806';
+    Share.share(message);
+  }
+
+  Future loadImage() async {
+    final appStorage = await getApplicationDocumentsDirectory();
+    final file = File('${appStorage.path}/image.png');
+    if (file.existsSync()) {
+      final bytes = await file.readAsBytes();
+      setState(() {
+        this.bytes = bytes;
+      });
+    }
+  }
+
+  Future saveImage(Uint8List? bytes) async {
+    final appStorage = await getApplicationDocumentsDirectory();
+    final file = File('${appStorage.path}/image.png');
+    file.writeAsBytes(bytes!);
+  }
+
+  Future toSocialNetworks(bytes) async {
+    final appStorage = await getApplicationDocumentsDirectory();
+    // final file = File('${appStorage.path}/image.png');
+    String message =
+        'https://apps.apple.com/app/one-life-life-tracker/id6447756806';
+    Share.shareFiles(['${appStorage.path}/image.png'], text: message);
   }
 }
