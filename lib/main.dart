@@ -436,6 +436,7 @@ class LifeTrackerState extends State<LifeTracker> {
                       padding: const EdgeInsets.all(20),
                       child: Center(
                         child: Container(
+                          // constraints: const BoxConstraints(maxWidth: 350),
                           padding: const EdgeInsets.all(16.0),
                           decoration: const BoxDecoration(
                             color: Color(0xffFBF1A3),
@@ -475,21 +476,19 @@ class LifeTrackerState extends State<LifeTracker> {
                 ),
                 SafeArea(
                   child: Center(
-                    child: ListView(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Center(
-                              child: Text(
-                                  'Share your results on social networks!')),
-                        ),
-                        Padding(
-                          
-                          padding: const EdgeInsets.all(20),
-                          child: SizedBox(
-                            width: 350,
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 350),
+                      child: ListView(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Center(
+                                child: Text(
+                                    'Share your results on social networks!')),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(20),
                             child: WidgetsToImage(
-
                               controller: controller,
                               child: SingleChildScrollView(
                                 child: SafeArea(
@@ -614,30 +613,30 @@ class LifeTrackerState extends State<LifeTracker> {
                               ),
                             ),
                           ),
-                        ),
-                        // if (bytes != null) buildImage(bytes!),
-                        Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Builder(builder: (BuildContext context) {
-                            return ElevatedButton(
-                              onPressed: () async {
-                                final bytes = await controller.capture();
-                                setState(() {
-                                  this.bytes = bytes;
-                                });
-                                saveImage(this.bytes);
-                                if (context.mounted) {
-                                  return toSocialNetworks(context);
-                                }
-                              },
-                              child: const Text(
-                                'Share',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            );
-                          }),
-                        )
-                      ],
+                          // if (bytes != null) buildImage(bytes!),
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Builder(builder: (BuildContext context) {
+                              return ElevatedButton(
+                                onPressed: () async {
+                                  final bytes = await controller.capture();
+                                  setState(() {
+                                    this.bytes = bytes;
+                                  });
+                                  saveImage(this.bytes);
+                                  if (context.mounted) {
+                                    return toSocialNetworks(context);
+                                  }
+                                },
+                                child: const Text(
+                                  'Share',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              );
+                            }),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
