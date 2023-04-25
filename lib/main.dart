@@ -484,126 +484,130 @@ class LifeTrackerState extends State<LifeTracker> {
                                   'Share your results on social networks!')),
                         ),
                         Padding(
+                          
                           padding: const EdgeInsets.all(20),
-                          child: WidgetsToImage(
-                            controller: controller,
-                            child: SingleChildScrollView(
-                              child: SafeArea(
-                                child: Center(
-                                  child: Container(
-                                    width: 350,
-                                    padding: const EdgeInsets.all(16.0),
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xffFBF1A3),
-                                      // borderRadius:
-                                      //     BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text(
-                                                style: TextStyle(
-                                                  fontFamily: "BakbakOne",
-                                                  fontSize: 20,
-                                                  // color: Color(0xff2c2c2c),
-                                                ),
-                                                'One Life - Life Tracker'),
-                                            Image.asset(
-                                              'assets/images/android/icon.png',
-                                              width: 50,
-                                              height: 50,
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text('My age:'),
-                                            Text(
-                                                style: const TextStyle(
-                                                  fontFamily: "BakbakOne",
-                                                  fontSize: 30,
-                                                  // color: Color(0xff2c2c2c),
-                                                ),
-                                                '$_ageInYears'),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text('I lived'),
-                                            Text(
-                                                style: const TextStyle(
-                                                  fontFamily: "BakbakOne",
-                                                  fontSize: 30,
-                                                  // color: Color(0xff2c2c2c),
-                                                ),
-                                                '$percentCompleteRounded%'),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text('I have'),
-                                            Text(
-                                                style: const TextStyle(
-                                                  fontFamily: "BakbakOne",
-                                                  fontSize: 30,
-                                                  // color: Color(0xff2c2c2c),
-                                                ),
-                                                '$percentHaveRounded%'),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text('I have years'),
-                                            Text(
-                                                style: const TextStyle(
-                                                  fontFamily: "BakbakOne",
-                                                  fontSize: 30,
-                                                  // color: Color(0xff2c2c2c),
-                                                ),
-                                                '$yearsHave'),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        LinearProgressIndicator(
-                                          color: const Color(0xff2c2c2c),
-                                          backgroundColor:
-                                              const Color(0xffB3DDC6),
-                                          value: percentComplete,
-                                          minHeight: 20,
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: const [
-                                            Text(
-                                              '',
-                                              style: TextStyle(fontSize: 10),
-                                            ),
-                                            Text(
-                                              '*More info in app',
-                                              style: TextStyle(fontSize: 10),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                          child: SizedBox(
+                            width: 350,
+                            child: WidgetsToImage(
+
+                              controller: controller,
+                              child: SingleChildScrollView(
+                                child: SafeArea(
+                                  child: Center(
+                                    child: Container(
+                                      padding: const EdgeInsets.all(16.0),
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xffFBF1A3),
+                                        // borderRadius:
+                                        //     BorderRadius.all(Radius.circular(10)),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text(
+                                                  style: TextStyle(
+                                                    fontFamily: "BakbakOne",
+                                                    fontSize: 20,
+                                                    // color: Color(0xff2c2c2c),
+                                                  ),
+                                                  'One Life - Life Tracker'),
+                                              Image.asset(
+                                                'assets/images/android/icon.png',
+                                                width: 50,
+                                                height: 50,
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text('My age:'),
+                                              Text(
+                                                  style: const TextStyle(
+                                                    fontFamily: "BakbakOne",
+                                                    fontSize: 30,
+                                                    // color: Color(0xff2c2c2c),
+                                                  ),
+                                                  '$_ageInYears'),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text('I lived'),
+                                              Text(
+                                                  style: const TextStyle(
+                                                    fontFamily: "BakbakOne",
+                                                    fontSize: 30,
+                                                    // color: Color(0xff2c2c2c),
+                                                  ),
+                                                  '$percentCompleteRounded%'),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text('I have'),
+                                              Text(
+                                                  style: const TextStyle(
+                                                    fontFamily: "BakbakOne",
+                                                    fontSize: 30,
+                                                    // color: Color(0xff2c2c2c),
+                                                  ),
+                                                  '$percentHaveRounded%'),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text('I have years'),
+                                              Text(
+                                                  style: const TextStyle(
+                                                    fontFamily: "BakbakOne",
+                                                    fontSize: 30,
+                                                    // color: Color(0xff2c2c2c),
+                                                  ),
+                                                  '$yearsHave'),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          LinearProgressIndicator(
+                                            color: const Color(0xff2c2c2c),
+                                            backgroundColor:
+                                                const Color(0xffB3DDC6),
+                                            value: percentComplete,
+                                            minHeight: 20,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: const [
+                                              Text(
+                                                '',
+                                                style: TextStyle(fontSize: 10),
+                                              ),
+                                              Text(
+                                                '*More info in app',
+                                                style: TextStyle(fontSize: 10),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
