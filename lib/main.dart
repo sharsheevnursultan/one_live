@@ -78,7 +78,10 @@ class AdMobService {
     if (Platform.isAndroid) {
       return 'ca-app-pub-2550588570628296/9765381559';
     } else if (Platform.isIOS) {
+      //work ad
       return 'ca-app-pub-2550588570628296/1296225985';
+      // test ad
+      // return 'ca-app-pub-3940256099942544/1033173712';
     }
     return null;
   }
@@ -88,7 +91,7 @@ class LifeTrackerState extends State<LifeTracker> {
   late InterstitialAd? _interstitialAd;
   bool _isInterstitialAdReady = false;
 
-// WidgetsToImageController to access widget
+  // WidgetsToImageController to access widget
   WidgetsToImageController controller = WidgetsToImageController();
 
   // to save image bytes of widget
@@ -186,6 +189,8 @@ class LifeTrackerState extends State<LifeTracker> {
     }
     double percentComplete = _ageInSeconds / (73 * 365 * 24 * 60 * 60);
     int percentCompleteRounded = (percentComplete * 100).round();
+    int percentHaveRounded = (percentCompleteRounded - 100).abs().round();
+    int yearsHave = _averageLifeExpectancyInMonths ~/ 12 - _ageInYears.toInt();
 
     // This function displays a CupertinoModalPopup with a reasonable fixed height
     // which hosts CupertinoDatePicker.
@@ -220,10 +225,14 @@ class LifeTrackerState extends State<LifeTracker> {
               title: const Text('One Life - Life Tracker',
                   style: TextStyle(fontFamily: "BakbakOne")),
               actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.ios_share),
-                  tooltip: 'Share App',
-                  onPressed: sharePressed,
+                Builder(
+                  builder: (BuildContext context) {
+                    return IconButton(
+                      onPressed: () => sharePressed(context),
+                      icon: const Icon(Icons.ios_share),
+                      tooltip: 'Share App',
+                    );
+                  },
                 ),
               ],
               bottom: const TabBar(
@@ -482,6 +491,7 @@ class LifeTrackerState extends State<LifeTracker> {
                               child: SafeArea(
                                 child: Center(
                                   child: Container(
+                                    width: 350,
                                     padding: const EdgeInsets.all(16.0),
                                     decoration: const BoxDecoration(
                                       color: Color(0xffFBF1A3),
@@ -505,25 +515,9 @@ class LifeTrackerState extends State<LifeTracker> {
                                                 'One Life - Life Tracker'),
                                             Image.asset(
                                               'assets/images/android/icon.png',
-                                              width: 80,
-                                              height: 80,
+                                              width: 50,
+                                              height: 50,
                                             ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text(
-                                                'From average life expectancy'),
-                                            Text(
-                                                style: const TextStyle(
-                                                  fontFamily: "BakbakOne",
-                                                  fontSize: 40,
-                                                  // color: Color(0xff2c2c2c),
-                                                ),
-                                                '$percentCompleteRounded%'),
                                           ],
                                         ),
                                         const SizedBox(height: 10),
@@ -535,10 +529,55 @@ class LifeTrackerState extends State<LifeTracker> {
                                             Text(
                                                 style: const TextStyle(
                                                   fontFamily: "BakbakOne",
-                                                  fontSize: 40,
+                                                  fontSize: 30,
                                                   // color: Color(0xff2c2c2c),
                                                 ),
                                                 '$_ageInYears'),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text('I lived'),
+                                            Text(
+                                                style: const TextStyle(
+                                                  fontFamily: "BakbakOne",
+                                                  fontSize: 30,
+                                                  // color: Color(0xff2c2c2c),
+                                                ),
+                                                '$percentCompleteRounded%'),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text('I have'),
+                                            Text(
+                                                style: const TextStyle(
+                                                  fontFamily: "BakbakOne",
+                                                  fontSize: 30,
+                                                  // color: Color(0xff2c2c2c),
+                                                ),
+                                                '$percentHaveRounded%'),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text('I have years'),
+                                            Text(
+                                                style: const TextStyle(
+                                                  fontFamily: "BakbakOne",
+                                                  fontSize: 30,
+                                                  // color: Color(0xff2c2c2c),
+                                                ),
+                                                '$yearsHave'),
                                           ],
                                         ),
                                         const SizedBox(height: 10),
@@ -548,6 +587,21 @@ class LifeTrackerState extends State<LifeTracker> {
                                               const Color(0xffB3DDC6),
                                           value: percentComplete,
                                           minHeight: 20,
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: const [
+                                            Text(
+                                              '',
+                                              style: TextStyle(fontSize: 10),
+                                            ),
+                                            Text(
+                                              '*More info in app',
+                                              style: TextStyle(fontSize: 10),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -560,20 +614,24 @@ class LifeTrackerState extends State<LifeTracker> {
                         // if (bytes != null) buildImage(bytes!),
                         Padding(
                           padding: const EdgeInsets.all(20),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              final bytes = await controller.capture();
-                              setState(() {
-                                this.bytes = bytes;
-                              });
-                              saveImage(this.bytes);
-                              toSocialNetworks(this.bytes);
-                            },
-                            child: const Text(
-                              'Share',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
+                          child: Builder(builder: (BuildContext context) {
+                            return ElevatedButton(
+                              onPressed: () async {
+                                final bytes = await controller.capture();
+                                setState(() {
+                                  this.bytes = bytes;
+                                });
+                                saveImage(this.bytes);
+                                if (context.mounted) {
+                                  return toSocialNetworks(context);
+                                }
+                              },
+                              child: const Text(
+                                'Share',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            );
+                          }),
                         )
                       ],
                     ),
@@ -585,10 +643,14 @@ class LifeTrackerState extends State<LifeTracker> {
 
   // Widget buildImage(Uint8List bytes) => Image.memory(bytes);
 
-  void sharePressed() {
+  Future<void> sharePressed(BuildContext context) async {
+    final box = context.findRenderObject() as RenderBox?;
     String message =
         'https://apps.apple.com/app/one-life-life-tracker/id6447756806';
-    Share.share(message);
+    await Share.share(
+      message,
+      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+    );
   }
 
   Future loadImage() async {
@@ -608,11 +670,16 @@ class LifeTrackerState extends State<LifeTracker> {
     file.writeAsBytes(bytes!);
   }
 
-  Future toSocialNetworks(bytes) async {
+  Future toSocialNetworks(context) async {
+    final box = context.findRenderObject() as RenderBox?;
     final appStorage = await getApplicationDocumentsDirectory();
-    // final file = File('${appStorage.path}/image.png');
-    String message =
-        'https://apps.apple.com/app/one-life-life-tracker/id6447756806';
-    Share.shareFiles(['${appStorage.path}/image.png'], text: message);
+    final file = File('${appStorage.path}/image.png');
+    if (file.existsSync()) {
+      await file.readAsBytes();
+      await Share.shareFiles(
+        ['${appStorage.path}/image.png'],
+        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+      );
+    }
   }
 }
