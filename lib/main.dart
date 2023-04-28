@@ -76,7 +76,10 @@ class LifeTracker extends StatefulWidget {
 class AdMobService {
   static String? get interstitialAdUnitId {
     if (Platform.isAndroid) {
+      //work id
       return 'ca-app-pub-2550588570628296/9765381559';
+      // test id
+      // return 'ca-app-pub-3940256099942544/1033173712';
     } else if (Platform.isIOS) {
       //work ad
       return 'ca-app-pub-2550588570628296/1296225985';
@@ -96,6 +99,8 @@ class LifeTrackerState extends State<LifeTracker> {
 
   // to save image bytes of widget
   Uint8List? bytes;
+
+  // int numberTab = 0;
 
   void showInterstitialAd() {
     if (_isInterstitialAdReady) {
@@ -214,6 +219,23 @@ class LifeTrackerState extends State<LifeTracker> {
                 ),
               ));
     }
+
+    // initialIndexController() {
+    //   if (numberTab < 3){
+    //     setState(() {
+    //       numberTab ++;
+    //     });
+    //
+    //   } if (numberTab ==4){
+    //     setState(() {
+    //       numberTab = 3;
+    //     });
+    //   }
+    //
+    //   print(numberTab);
+    // }
+
+
 
     return DefaultTabController(
         length: 4,
@@ -396,6 +418,7 @@ class LifeTrackerState extends State<LifeTracker> {
                                 ],
                               ),
                             ),
+                            // ElevatedButton(onPressed: initialIndexController, child: Text('Next Tab')),
                           ],
                         ),
                       ),
@@ -542,7 +565,7 @@ class LifeTrackerState extends State<LifeTracker> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              const Text('I lived'),
+                                              const Text('I lived:'),
                                               Text(
                                                   style: const TextStyle(
                                                     fontFamily: "BakbakOne",
@@ -557,7 +580,7 @@ class LifeTrackerState extends State<LifeTracker> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              const Text('I have'),
+                                              const Text('I have:'),
                                               Text(
                                                   style: const TextStyle(
                                                     fontFamily: "BakbakOne",
@@ -572,7 +595,7 @@ class LifeTrackerState extends State<LifeTracker> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              const Text('I have years'),
+                                              const Text('I have years:'),
                                               Text(
                                                   style: const TextStyle(
                                                     fontFamily: "BakbakOne",
