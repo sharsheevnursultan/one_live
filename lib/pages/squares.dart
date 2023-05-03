@@ -19,9 +19,7 @@ class _SquaresState extends State<Squares> {
   @override
   Widget build(BuildContext context) {
     final averageLifeExpectancyInMonths =Provider.of<LifeTrackerState>(context).averageLifeExpectancyInMonths;
-    // final myAgeInMonths =Provider.of<MyData>(context).myAgeInMonths;
-    print(averageLifeExpectancyInMonths);
-    print(myAgeInMonths);
+
     for (int i = 0; i < averageLifeExpectancyInMonths; i++) {
       Color? color = const Color(0xffB3DDC6);
       if (i < myAgeInMonths) {
@@ -66,5 +64,9 @@ class _SquaresState extends State<Squares> {
                 ),
               ),
             )));
+  }
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

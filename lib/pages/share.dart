@@ -206,7 +206,10 @@ class _SharePageState extends State<SharePage> {
       ),
     );
   }
-
+  @override
+  void dispose() {
+    super.dispose();
+  }
   Future loadImage() async {
     final appStorage = await getApplicationDocumentsDirectory();
     final file = File('${appStorage.path}/image.png');

@@ -62,4 +62,9 @@ class _PercentTabState extends State<PercentTab> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }
