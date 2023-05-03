@@ -1,38 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:one_life/pages/theme.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+class FirstPage extends StatefulWidget {
+  const FirstPage({Key? key}) : super(key: key);
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<FirstPage> createState() => _FirstPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(
-          elevatedButtonTheme: (ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.black,
-              backgroundColor: const Color(0xffB3DDC6),
-            ),
-          )),
-          fontFamily: 'Montserrat',
-          buttonTheme: const ButtonThemeData(buttonColor: Color(0xffB3DDC6)),
-          textTheme:
-              const TextTheme(bodyText2: TextStyle(color: Color(0xff2c2c2c))),
-          appBarTheme: const AppBarTheme(
-            color: Color(0xfffaf7ed),
-            iconTheme: IconThemeData(color: Colors.black),
-            toolbarTextStyle: TextStyle(color: Color(0xff2c2c2c)),
-            titleTextStyle: TextStyle(color: Color(0xff2c2c2c), fontSize: 20),
-          ),
-          primaryColor: const Color(0xfffaf7ed),
-          scaffoldBackgroundColor: const Color(0xfffaf7ed),
-          colorScheme: ColorScheme.fromSwatch()
-              .copyWith(secondary: const Color(0xffB3DDC6)),
-        ),
+        theme: myTheme,
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -82,7 +62,6 @@ class _MainPageState extends State<MainPage> {
               ),
             )),
           ),
-
           // Your app screen body
         ));
   }

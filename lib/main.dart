@@ -1,20 +1,25 @@
-import 'dart:io' show File, Platform;
-import 'dart:typed_data';
+import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:one_life/pages/percentTab.dart';
+import 'package:one_life/pages/share.dart';
+import 'package:one_life/pages/squares.dart';
+import 'package:one_life/pages/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:widgets_to_image/widgets_to_image.dart';
 
-import 'pages/firstPage.dart';
+import 'pages/startPage.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   runApp(
-    const MyApp(),
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_) => LifeTrackerState()),
+      ChangeNotifierProvider(create: (_) => MyData()),
+    ], child: const MyApp()),
   );
 }
 
@@ -34,31 +39,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        fontFamily: 'Montserrat',
-        elevatedButtonTheme: (ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: const Color(0xffB3DDC6)))),
-        buttonTheme: const ButtonThemeData(buttonColor: Color(0xffB3DDC6)),
-        textTheme:
-            const TextTheme(bodyMedium: TextStyle(color: Color(0xff2c2c2c))),
-        appBarTheme: const AppBarTheme(
-          color: Color(0xfffaf7ed),
-          iconTheme: IconThemeData(color: Colors.black),
-          toolbarTextStyle: TextStyle(color: Color(0xff2c2c2c)),
-          titleTextStyle: TextStyle(color: Color(0xff2c2c2c), fontSize: 20),
-        ),
-        primaryColor: const Color(0xfffaf7ed),
-        scaffoldBackgroundColor: const Color(0xfffaf7ed),
-        colorScheme: ColorScheme.fromSwatch()
-            .copyWith(secondary: const Color(0xffB3DDC6)),
-      ),
+      theme: myTheme,
       debugShowCheckedModeBanner: false,
-      // theme: ThemeData.dark(),
       initialRoute: '/firstPage',
       routes: {
-        '/firstPage': (context) => const MainPage(),
+        '/firstPage': (context) => const FirstPage(),
         '/main': (context) => const LifeTracker(),
       },
       home: const LifeTracker(),
@@ -73,35 +58,104 @@ class LifeTracker extends StatefulWidget {
   LifeTrackerState createState() => LifeTrackerState();
 }
 
+// Admob Id manager
 class AdMobService {
   static String? get interstitialAdUnitId {
     if (Platform.isAndroid) {
       //work id
-      return 'ca-app-pub-2550588570628296/9765381559';
+      // return 'ca-app-pub-2550588570628296/9765381559';
       // test id
-      // return 'ca-app-pub-3940256099942544/1033173712';
+      return 'ca-app-pub-3940256099942544/1033173712';
     } else if (Platform.isIOS) {
       //work ad
-      return 'ca-app-pub-2550588570628296/1296225985';
+      // return 'ca-app-pub-2550588570628296/1296225985';
       // test ad
-      // return 'ca-app-pub-3940256099942544/1033173712';
+      return 'ca-app-pub-3940256099942544/1033173712';
     }
     return null;
   }
 }
 
-class LifeTrackerState extends State<LifeTracker> {
+class MyData extends ChangeNotifier {
+  int _myAgeInYears = 0;
+  int _myAgeInMonths = 0;
+  int _myAgeInWeeks = 0;
+  int _myAgeInDays = 0;
+  int _myAgeInHours = 0;
+  int _myAgeInMinutes = 0;
+  int _myAgeInSeconds = 0;
+
+  int get myAgeInYears => _myAgeInYears;
+
+  int get myAgeInMonths => _myAgeInMonths;
+
+  int get myAgeInWeeks => _myAgeInWeeks;
+
+  int get myAgeInDays => _myAgeInDays;
+
+  int get myAgeInHours => _myAgeInHours;
+
+  int get myAgeInMinutes => _myAgeInMinutes;
+
+  int get myAgeInSeconds => _myAgeInSeconds;
+
+  void changeTime(DateTime birthdate) {
+    Duration age = DateTime.now().difference(birthdate);
+    int myAgeInYears = age.inDays ~/ 365;
+    int myAgeInMonths = age.inDays ~/ 30;
+    int myAgeInWeeks = (age.inDays / 7).floor();
+    int myAgeInDays = age.inDays;
+    int myAgeInHours = age.inHours;
+    int myAgeInMinutes = age.inMinutes;
+    int myAgeInSeconds = age.inSeconds;
+    _myAgeInYears = myAgeInYears;
+    _myAgeInMonths = myAgeInMonths;
+    _myAgeInWeeks = myAgeInWeeks;
+    _myAgeInDays = myAgeInDays;
+    _myAgeInHours = myAgeInHours;
+    _myAgeInMinutes = myAgeInMinutes;
+    _myAgeInSeconds = myAgeInSeconds;
+    notifyListeners();
+  }
+}
+
+class LifeTrackerState extends State<LifeTracker> with ChangeNotifier {
   late InterstitialAd? _interstitialAd;
   bool _isInterstitialAdReady = false;
 
-  // WidgetsToImageController to access widget
-  WidgetsToImageController controller = WidgetsToImageController();
+  dynamic averageLifeExpectancyInMonths = 876; // 73 years in months
+  dynamic myAgeInYears = 0;
+  dynamic myAgeInMonths = 0;
+  dynamic myAgeInWeeks = 0;
+  dynamic myAgeInDays = 0;
+  dynamic myAgeInHours = 0;
+  dynamic myAgeInMinutes = 0;
+  dynamic myAgeInSeconds = 0;
+  DateTime date = DateTime.now();
 
-  // to save image bytes of widget
-  Uint8List? bytes;
+  void updateAgeInOtherUnits(DateTime birthdate) {
+    Duration age = DateTime.now().difference(birthdate);
+    int ageInYears = age.inDays ~/ 365;
+    int ageInMonths = age.inDays ~/ 30;
+    int ageInWeeks = (age.inDays / 7).floor();
+    int ageInDays = age.inDays;
+    int ageInHours = age.inHours;
+    int ageInMinutes = age.inMinutes;
+    int ageInSeconds = age.inSeconds;
 
-  // int numberTab = 0;
+    setState(() {
+      myAgeInYears = ageInYears;
+      myAgeInMonths = ageInMonths;
+      myAgeInWeeks = ageInWeeks;
+      myAgeInDays = ageInDays;
+      myAgeInHours = ageInHours;
+      myAgeInMinutes = ageInMinutes;
+      myAgeInSeconds = ageInSeconds;
+    });
 
+  }
+
+  //admobShow
   void showInterstitialAd() {
     if (_isInterstitialAdReady) {
       _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
@@ -121,43 +175,13 @@ class LifeTrackerState extends State<LifeTracker> {
     }
   }
 
-  void _updateAgeInOtherUnits(DateTime birthdate) {
-    Duration age = DateTime.now().difference(birthdate);
-    int ageInYears = age.inDays ~/ 365;
-    int ageInMonths = age.inDays ~/ 30;
-    int ageInWeeks = (age.inDays / 7).floor();
-    int ageInDays = age.inDays;
-    int ageInHours = age.inHours;
-    int ageInMinutes = age.inMinutes;
-    int ageInSeconds = age.inSeconds;
-    setState(() {
-      _ageInYears = ageInYears;
-      _ageInMonths = ageInMonths;
-      _ageInWeeks = ageInWeeks;
-      _ageInDays = ageInDays;
-      _ageInHours = ageInHours;
-      _ageInMinutes = ageInMinutes;
-      _ageInSeconds = ageInSeconds;
-    });
-  }
-
-  final int _averageLifeExpectancyInMonths = 876; // 73 years in months
-  int _ageInYears = 0;
-  int _ageInMonths = 0;
-  int _ageInWeeks = 0;
-  int _ageInDays = 0;
-  int _ageInHours = 0;
-  int _ageInMinutes = 0;
-  int _ageInSeconds = 0;
-  DateTime date = DateTime.now();
-
   @override
   void initState() {
     super.initState();
     _createInterstitialAd();
-    loadImage();
   }
 
+  // Admob ads
   void _createInterstitialAd() {
     InterstitialAd.load(
         adUnitId: AdMobService.interstitialAdUnitId!,
@@ -174,32 +198,10 @@ class LifeTrackerState extends State<LifeTracker> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> squares = [];
-    for (int i = 0; i < _averageLifeExpectancyInMonths; i++) {
-      Color? color = const Color(0xffB3DDC6);
-      if (i < _ageInMonths) {
-        color = const Color(0xff2c2c2c);
-      }
-      squares.add(
-        Container(
-          width: 10,
-          height: 10,
-          margin: const EdgeInsets.all(2),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-      );
-    }
-    double percentComplete = _ageInSeconds / (73 * 365 * 24 * 60 * 60);
-    int percentCompleteRounded = (percentComplete * 100).round();
-    int percentHaveRounded = (percentCompleteRounded - 100).abs().round();
-    int yearsHave = _averageLifeExpectancyInMonths ~/ 12 - _ageInYears.toInt();
 
     // This function displays a CupertinoModalPopup with a reasonable fixed height
     // which hosts CupertinoDatePicker.
-    void _showDialog(Widget child) {
+    void showDialog(Widget child) {
       showCupertinoModalPopup<void>(
           context: context,
           builder: (BuildContext context) => Container(
@@ -219,23 +221,6 @@ class LifeTrackerState extends State<LifeTracker> {
                 ),
               ));
     }
-
-    // initialIndexController() {
-    //   if (numberTab < 3){
-    //     setState(() {
-    //       numberTab ++;
-    //     });
-    //
-    //   } if (numberTab ==4){
-    //     setState(() {
-    //       numberTab = 3;
-    //     });
-    //   }
-    //
-    //   print(numberTab);
-    // }
-
-
 
     return DefaultTabController(
         length: 4,
@@ -300,7 +285,7 @@ class LifeTrackerState extends State<LifeTracker> {
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
-                                    _showDialog(
+                                    showDialog(
                                       CupertinoDatePicker(
                                         initialDateTime: date,
                                         mode: CupertinoDatePickerMode.date,
@@ -309,10 +294,14 @@ class LifeTrackerState extends State<LifeTracker> {
                                         // This is called when the user changes the date.
                                         onDateTimeChanged: (DateTime newDate) {
                                           date = newDate;
-                                          _updateAgeInOtherUnits(date);
+                                          updateAgeInOtherUnits(date);
+                                          Provider.of<MyData>(context,
+                                                  listen: false)
+                                              .changeTime(date);
                                         },
                                       ),
                                     );
+
                                     showInterstitialAd();
                                   },
                                   // Display a CupertinoDatePicker in date picker mode.
@@ -357,7 +346,7 @@ class LifeTrackerState extends State<LifeTracker> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Text('years:'),
-                                      Text('$_ageInYears'),
+                                      Text('$myAgeInYears'),
                                     ],
                                   ),
                                   const SizedBox(height: 20),
@@ -366,7 +355,7 @@ class LifeTrackerState extends State<LifeTracker> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Text('months:'),
-                                      Text('$_ageInMonths'),
+                                      Text('$myAgeInMonths'),
                                     ],
                                   ),
                                   const SizedBox(height: 20),
@@ -375,7 +364,7 @@ class LifeTrackerState extends State<LifeTracker> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Text('weeks:'),
-                                      Text('$_ageInWeeks'),
+                                      Text('$myAgeInWeeks'),
                                     ],
                                   ),
                                   const SizedBox(height: 20),
@@ -384,7 +373,7 @@ class LifeTrackerState extends State<LifeTracker> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Text('days:'),
-                                      Text('$_ageInDays'),
+                                      Text('$myAgeInDays'),
                                     ],
                                   ),
                                   const SizedBox(height: 20),
@@ -393,7 +382,7 @@ class LifeTrackerState extends State<LifeTracker> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Text('hours:'),
-                                      Text('$_ageInHours'),
+                                      Text('$myAgeInHours'),
                                     ],
                                   ),
                                   const SizedBox(height: 20),
@@ -402,7 +391,7 @@ class LifeTrackerState extends State<LifeTracker> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Text('minutes:'),
-                                      Text('$_ageInMinutes'),
+                                      Text('$myAgeInMinutes'),
                                     ],
                                   ),
                                   const SizedBox(height: 20),
@@ -411,7 +400,7 @@ class LifeTrackerState extends State<LifeTracker> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Text('seconds:'),
-                                      Text('$_ageInSeconds'),
+                                      Text('$myAgeInSeconds'),
                                     ],
                                   ),
                                   const SizedBox(height: 20),
@@ -425,250 +414,14 @@ class LifeTrackerState extends State<LifeTracker> {
                     ),
                   ),
                 ),
-                SafeArea(
-                    child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Center(
-                          child: Container(
-                            padding: const EdgeInsets.all(16.0),
-                            decoration: const BoxDecoration(
-                              color: Color(0xffFBF1A3),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                    'Life of an average person in months.'),
-                                const Text('One line equals 3 years'),
-                                const SizedBox(height: 30),
-                                Expanded(
-                                  child: GridView.count(
-                                    crossAxisCount: 36,
-                                    children: squares,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ))),
-                SingleChildScrollView(
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Center(
-                        child: Container(
-                          // constraints: const BoxConstraints(maxWidth: 350),
-                          padding: const EdgeInsets.all(16.0),
-                          decoration: const BoxDecoration(
-                            color: Color(0xffFBF1A3),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                  'According to the WHO, the average life expectancy worldwide is 73 years'),
-                              const SizedBox(height: 30),
-                              Row(
-                                children: [
-                                  Text(
-                                      style: const TextStyle(
-                                        fontFamily: "BakbakOne",
-                                        fontSize: 40,
-                                        // color: Color(0xff2c2c2c),
-                                      ),
-                                      '$percentCompleteRounded% '),
-                                  const Text('of average life expectancy'),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              LinearProgressIndicator(
-                                color: const Color(0xff2c2c2c),
-                                backgroundColor: const Color(0xffB3DDC6),
-                                value: percentComplete,
-                                minHeight: 20,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SafeArea(
-                  child: Center(
-                    child: Container(
-                      constraints: const BoxConstraints(maxWidth: 350),
-                      child: ListView(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(20),
-                            child: Center(
-                                child: Text(
-                                    'Share your results on social networks!')),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: WidgetsToImage(
-                              controller: controller,
-                              child: SingleChildScrollView(
-                                child: SafeArea(
-                                  child: Center(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(16.0),
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xffFBF1A3),
-                                        // borderRadius:
-                                        //     BorderRadius.all(Radius.circular(10)),
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Text(
-                                                  style: TextStyle(
-                                                    fontFamily: "BakbakOne",
-                                                    fontSize: 20,
-                                                    // color: Color(0xff2c2c2c),
-                                                  ),
-                                                  'One Life - Life Tracker'),
-                                              Image.asset(
-                                                'assets/images/android/icon.png',
-                                                width: 50,
-                                                height: 50,
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Text('My age:'),
-                                              Text(
-                                                  style: const TextStyle(
-                                                    fontFamily: "BakbakOne",
-                                                    fontSize: 30,
-                                                    // color: Color(0xff2c2c2c),
-                                                  ),
-                                                  '$_ageInYears'),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Text('I lived:'),
-                                              Text(
-                                                  style: const TextStyle(
-                                                    fontFamily: "BakbakOne",
-                                                    fontSize: 30,
-                                                    // color: Color(0xff2c2c2c),
-                                                  ),
-                                                  '$percentCompleteRounded%'),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Text('I have:'),
-                                              Text(
-                                                  style: const TextStyle(
-                                                    fontFamily: "BakbakOne",
-                                                    fontSize: 30,
-                                                    // color: Color(0xff2c2c2c),
-                                                  ),
-                                                  '$percentHaveRounded%'),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Text('I have years:'),
-                                              Text(
-                                                  style: const TextStyle(
-                                                    fontFamily: "BakbakOne",
-                                                    fontSize: 30,
-                                                    // color: Color(0xff2c2c2c),
-                                                  ),
-                                                  '$yearsHave'),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 10),
-                                          LinearProgressIndicator(
-                                            color: const Color(0xff2c2c2c),
-                                            backgroundColor:
-                                                const Color(0xffB3DDC6),
-                                            value: percentComplete,
-                                            minHeight: 20,
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: const [
-                                              Text(
-                                                '',
-                                                style: TextStyle(fontSize: 10),
-                                              ),
-                                              Text(
-                                                '*More info in app',
-                                                style: TextStyle(fontSize: 10),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          // if (bytes != null) buildImage(bytes!),
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Builder(builder: (BuildContext context) {
-                              return ElevatedButton(
-                                onPressed: () async {
-                                  final bytes = await controller.capture();
-                                  setState(() {
-                                    this.bytes = bytes;
-                                  });
-                                  saveImage(this.bytes);
-                                  if (context.mounted) {
-                                    return toSocialNetworks(context);
-                                  }
-                                },
-                                child: const Text(
-                                  'Share',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              );
-                            }),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                const Squares(),
+                const PercentTab(),
+                const SharePage(),
               ],
             )));
   }
 
-  // Widget buildImage(Uint8List bytes) => Image.memory(bytes);
-
+  // Share app link
   Future<void> sharePressed(BuildContext context) async {
     final box = context.findRenderObject() as RenderBox?;
     String message =
@@ -679,33 +432,4 @@ class LifeTrackerState extends State<LifeTracker> {
     );
   }
 
-  Future loadImage() async {
-    final appStorage = await getApplicationDocumentsDirectory();
-    final file = File('${appStorage.path}/image.png');
-    if (file.existsSync()) {
-      final bytes = await file.readAsBytes();
-      setState(() {
-        this.bytes = bytes;
-      });
-    }
-  }
-
-  Future saveImage(Uint8List? bytes) async {
-    final appStorage = await getApplicationDocumentsDirectory();
-    final file = File('${appStorage.path}/image.png');
-    file.writeAsBytes(bytes!);
-  }
-
-  Future toSocialNetworks(context) async {
-    final box = context.findRenderObject() as RenderBox?;
-    final appStorage = await getApplicationDocumentsDirectory();
-    final file = File('${appStorage.path}/image.png');
-    if (file.existsSync()) {
-      await file.readAsBytes();
-      await Share.shareFiles(
-        ['${appStorage.path}/image.png'],
-        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-      );
-    }
-  }
 }
