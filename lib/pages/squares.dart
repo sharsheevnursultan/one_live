@@ -1,14 +1,7 @@
-import 'dart:io' show File, Platform;
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:one_life/main.dart';
-import 'package:one_life/pages/share.dart';
-import 'package:one_life/pages/squares.dart';
-import 'package:one_life/pages/theme.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 class Squares extends StatefulWidget {
   const Squares({Key? key}) : super(key: key);

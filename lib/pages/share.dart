@@ -33,12 +33,14 @@ class _SharePageState extends State<SharePage> {
 
   @override
   Widget build(BuildContext context) {
-    final myAgeInSeconds=Provider.of<MyData>(context).myAgeInSeconds;
+    final myAgeInSeconds = Provider.of<MyData>(context).myAgeInSeconds;
     double percentComplete = myAgeInSeconds / (73 * 365 * 24 * 60 * 60);
     int percentCompleteRounded = (percentComplete * 100).round();
     int percentHaveRounded = (percentCompleteRounded - 100).abs().round();
-    int yearsHave = Provider.of<LifeTrackerState>(context).averageLifeExpectancyInMonths ~/ 12 - ageInYears.toInt();
-
+    num yearsHave =
+        Provider.of<LifeTrackerState>(context).averageLifeExpectancyInMonths ~/
+                12 -
+            ageInYears.toInt();
 
     return SafeArea(
       child: Center(
