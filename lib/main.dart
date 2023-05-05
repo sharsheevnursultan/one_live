@@ -37,8 +37,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: myTheme,
+    return CupertinoApp(
+      // theme: materialTheme,
+      theme: cupertinoTheme,
       debugShowCheckedModeBanner: false,
       initialRoute: '/firstPage',
       routes: {
@@ -192,208 +193,235 @@ class LifeTrackerState extends State<LifeTracker> with ChangeNotifier {
   int averageLifeExpectancyInMonths = 876; // 73 years in months
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: 4,
-        initialIndex: 0,
-        child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: const Color(0xfffaf7ed),
-            appBar: AppBar(
-              title: const Text('One Life - Life Tracker',
-                  style: TextStyle(fontFamily: "BakbakOne")),
-              actions: <Widget>[
-                Builder(
-                  builder: (BuildContext context) {
-                    return IconButton(
-                      onPressed: () => sharePressed(context),
-                      icon: const Icon(Icons.ios_share),
-                      tooltip: 'Share App',
-                    );
-                  },
-                ),
-              ],
-              bottom: const TabBar(
-                tabs: <Widget>[
-                  Tab(
-                    icon: Icon(Icons.access_time),
-                  ),
-                  Tab(
-                    icon: Icon(Icons.grid_view),
-                  ),
-                  Tab(
-                    icon: Icon(Icons.percent),
-                  ),
-                  Tab(
-                    icon: Icon(Icons.share),
-                  ),
-                ],
-              ),
+    return CupertinoPageScaffold(
+      backgroundColor: const Color(0xfffaf7ed),
+      navigationBar: CupertinoNavigationBar(
+
+          // Try removing opacity to observe the lack of a blur effect and of sliding content.
+          backgroundColor: const Color(0xfffaf7ed).withOpacity(1),
+          middle: const Text('One Life - Life Tracker'),
+          trailing: CupertinoButton(
+            padding: EdgeInsets.zero,
+            onPressed: () {
+              sharePressed(context);
+            },
+            child: const Icon(
+              CupertinoIcons.share,
+              color: Color(0xff2c2c2c),
             ),
-            body: TabBarView(
-              children: <Widget>[
-                SingleChildScrollView(
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                                'Select your birthday to find out your life data'),
-                            const SizedBox(height: 30),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          )
+      ),
+      child: CupertinoTabScaffold(
+        backgroundColor: const Color(0xfffaf7ed),
+        tabBar: CupertinoTabBar(
+          activeColor: const Color(0xff2c2c2c),
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              backgroundColor: Color(0xff2c2c2c),
+              icon: Icon(CupertinoIcons.time),
+              // label: 'Enter Date',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.square_grid_2x2),
+              // label: 'Enter Date',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.percent),
+              // label: 'Per',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.share),
+              // label: 'Enter Date',
+            ),
+          ],
+        ),
+        tabBuilder: (BuildContext context, int index) {
+          return CupertinoTabView(
+            builder: (BuildContext context) {
+              switch (index) {
+                case 0:
+                  return Container(
+                    color: const Color(0xfffaf7ed),
+                    child: SingleChildScrollView(
+                      child: SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  '${date.month}.${date.day}.${date.year}',
-                                  style: const TextStyle(
-                                    fontFamily: "BakbakOne",
-                                    fontSize: 40,
-                                    color: Color(0xff2c2c2c),
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      CupertinoDatePicker(
-                                        initialDateTime: date,
-                                        mode: CupertinoDatePickerMode.date,
-                                        use24hFormat: true,
-                                        minimumYear: 1900,
-                                        // This is called when the user changes the date.
-                                        onDateTimeChanged: (DateTime newDate) {
-                                          date = newDate;
-
-                                          Provider.of<MyData>(context,
-                                                  listen: false)
-                                              .changeTime(date);
-                                        },
+                                const Text(
+                                    'Enter your birthday to find out your life data'),
+                                const SizedBox(height: 30),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '${date.month}.${date.day}.${date.year}',
+                                      style: const TextStyle(
+                                        fontFamily: "BakbakOne",
+                                        fontSize: 40,
+                                        color: Color(0xff2c2c2c),
                                       ),
-                                    );
+                                    ),
+                                    CupertinoButton.filled(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          15, 5, 15, 5),
 
-                                    // showInterstitialAd();
-                                  },
-                                  // Display a CupertinoDatePicker in date picker mode.
-                                  // In this example, the date is formatted manually. You can
-                                  // use the intl package to format the value based on the
-                                  // user's locale settings.
-                                  child: const Text(
-                                    "Enter date",
+                                      onPressed: () {
+                                        showDialog(
+                                          CupertinoDatePicker(
+                                            initialDateTime: date,
+                                            mode: CupertinoDatePickerMode.date,
+                                            use24hFormat: true,
+                                            minimumYear: 1900,
+                                            // This is called when the user changes the date.
+                                            onDateTimeChanged:
+                                                (DateTime newDate) {
+                                              date = newDate;
+                                              Provider.of<MyData>(context,
+                                                      listen: false)
+                                                  .changeTime(date);
+                                            },
+                                          ),
+                                        );
+
+                                        showInterstitialAd();
+                                      },
+                                      // Display a CupertinoDatePicker in date picker mode.
+                                      // In this example, the date is formatted manually. You can
+                                      // use the intl package to format the value based on the
+                                      // user's locale settings.
+                                      child: const Text(
+                                        "Enter date",
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 30),
+                                Container(
+                                  padding: const EdgeInsets.all(16.0),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xffFBF1A3),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: const [
+                                          Text(
+                                            'Your age in:',
+                                            style: TextStyle(
+                                              fontFamily: "BakbakOne",
+                                              fontSize: 40,
+                                              // color: Color(0xff2c2c2c),
+                                            ),
+                                          ),
+                                          Text(''),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 30),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text('years:'),
+                                          Text('$myAgeInYears'),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text('months:'),
+                                          Text('$myAgeInMonths'),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text('weeks:'),
+                                          Text('$myAgeInWeeks'),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text('days:'),
+                                          Text('$myAgeInDays'),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text('hours:'),
+                                          Text('$myAgeInHours'),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text('minutes:'),
+                                          Text('$myAgeInMinutes'),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text('seconds:'),
+                                          Text('$myAgeInSeconds'),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 20),
+                                    ],
                                   ),
                                 ),
+                                // ElevatedButton(onPressed: initialIndexController, child: Text('Next Tab')),
                               ],
                             ),
-                            const SizedBox(height: 30),
-                            Container(
-                              padding: const EdgeInsets.all(16.0),
-                              decoration: const BoxDecoration(
-                                color: Color(0xffFBF1A3),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: const [
-                                      Text(
-                                        'Your age in:',
-                                        style: TextStyle(
-                                          fontFamily: "BakbakOne",
-                                          fontSize: 40,
-                                          // color: Color(0xff2c2c2c),
-                                        ),
-                                      ),
-                                      Text(''),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 30),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text('years:'),
-                                      Text('$myAgeInYears'),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text('months:'),
-                                      Text('$myAgeInMonths'),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text('weeks:'),
-                                      Text('$myAgeInWeeks'),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text('days:'),
-                                      Text('$myAgeInDays'),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text('hours:'),
-                                      Text('$myAgeInHours'),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text('minutes:'),
-                                      Text('$myAgeInMinutes'),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text('seconds:'),
-                                      Text('$myAgeInSeconds'),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 20),
-                                ],
-                              ),
-                            ),
-                            // ElevatedButton(onPressed: initialIndexController, child: Text('Next Tab')),
-                          ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                const Squares(),
-                const PercentTab(),
-                const SharePage(),
-              ],
-            )));
+                  );
+                case 1:
+                  return const Squares();
+                case 2:
+                  return const PercentTab();
+                case 3:
+                  return const SharePage();
+                default:
+                  return Container();
+              }
+            },
+          );
+        },
+      ),
+    );
   }
   @override
   void dispose() {
-    // очистка ресурсов вашего виджета здесь
-    super.dispose(); // вызов родительского метода dispose()
+    super.dispose();
+    print('main dispose');
   }
+
   // Share app link
   Future<void> sharePressed(BuildContext context) async {
     final box = context.findRenderObject() as RenderBox?;
@@ -403,6 +431,7 @@ class LifeTrackerState extends State<LifeTracker> with ChangeNotifier {
       message,
       sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
     );
+
   }
 
 

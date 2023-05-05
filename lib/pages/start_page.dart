@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:one_life/pages/theme.dart';
 
@@ -11,13 +12,13 @@ class FirstPage extends StatefulWidget {
 class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        theme: myTheme,
+    return CupertinoApp(
+        theme: cupertinoTheme,
         debugShowCheckedModeBanner: false,
-        home: Scaffold(
+        home: CupertinoPageScaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: const Color(0xfffaf7ed),
-          body: SafeArea(
+          child: SafeArea(
             child: Center(
                 child: Padding(
               padding: const EdgeInsets.all(10.0),
@@ -41,12 +42,14 @@ class _FirstPageState extends State<FirstPage> {
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
+
                   const SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const SizedBox(),
-                      ElevatedButton(
+                      CupertinoButton.filled(
+                        padding: const EdgeInsets.fromLTRB(15,5,15,5),
                         onPressed: () {
                           Navigator.pushNamed(context, '/main');
                           // Provider.of<LifeTrackerState>(context, listen: false).showInterstitialAd();

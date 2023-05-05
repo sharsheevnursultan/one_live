@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-ThemeData myTheme = ThemeData(
+ThemeData materialTheme = ThemeData(
   fontFamily: 'Montserrat',
   elevatedButtonTheme: (ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -19,3 +20,18 @@ ThemeData myTheme = ThemeData(
   colorScheme:
       ColorScheme.fromSwatch().copyWith(secondary: const Color(0xffB3DDC6)),
 );
+
+CupertinoThemeData cupertinoTheme = const CupertinoThemeData(
+    brightness: Brightness.light,
+    scaffoldBackgroundColor: Color(0xfffaf7ed),
+    barBackgroundColor: Color(0xfffaf7ed),
+    primaryColor: Color(0xffB3DDC6),
+    primaryContrastingColor: Color(0xff2c2c2c),
+    textTheme: CupertinoTextThemeData(
+        navLargeTitleTextStyle: TextStyle(fontFamily: 'BakbakOne', color: Color(0xff2c2c2c)),
+        navTitleTextStyle: TextStyle(fontFamily: 'BakbakOne', color: Color(0xff2c2c2c)),
+        primaryColor: Color(0xff2c2c2c),
+        textStyle: TextStyle(
+          fontFamily: 'Montserrat',
+          color: Color(0xff2c2c2c),
+        )));
