@@ -196,19 +196,20 @@ class LifeTrackerState extends State<LifeTracker> with ChangeNotifier {
     return CupertinoPageScaffold(
       backgroundColor: const Color(0xfffaf7ed),
       navigationBar: CupertinoNavigationBar(
-
           // Try removing opacity to observe the lack of a blur effect and of sliding content.
           backgroundColor: const Color(0xfffaf7ed).withOpacity(1),
           middle: const Text('One Life - Life Tracker'),
-          trailing: CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: () {
-              sharePressed(context);
-            },
-            child: const Icon(
-              CupertinoIcons.share,
-              color: Color(0xff2c2c2c),
-            ),
+          trailing: Builder(
+            builder: (context) {
+              return CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () => sharePressed(context),
+                child: const Icon(
+                  CupertinoIcons.share,
+                  color: Color(0xff2c2c2c),
+                ),
+              );
+            }
           )
       ),
       child: CupertinoTabScaffold(
