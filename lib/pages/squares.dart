@@ -11,30 +11,31 @@ class Squares extends StatefulWidget {
 }
 
 class _SquaresState extends State<Squares> {
-  List<Widget> squares = [];
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> squares = [];
     final averageLifeExpectancyInMonths =
         Provider.of<LifeTrackerState>(context).averageLifeExpectancyInMonths;
     final myAgeInMonths = Provider.of<MyData>(context).myAgeInMonths;
-    for (int i = 0; i < averageLifeExpectancyInMonths; i++) {
-      Color? color = const Color(0xffB3DDC6);
-      if (i < myAgeInMonths) {
-        color = const Color(0xff2c2c2c);
-      }
-      squares.add(
-        Container(
-          width: 10,
-          height: 10,
-          margin: const EdgeInsets.all(2),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(2),
+      for (int i = 0; i < averageLifeExpectancyInMonths; i++) {
+        Color? color = const Color(0xffB3DDC6);
+        if (i < myAgeInMonths) {
+          color = const Color(0xff2c2c2c);
+        }
+        squares.add(
+          Container(
+            width: 10,
+            height: 10,
+            margin: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(2),
+            ),
           ),
-        ),
-      );
-    }
+        );
+      }
+
 
     return Container(
       color: const Color(0xfffaf7ed),
