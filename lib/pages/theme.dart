@@ -29,7 +29,7 @@ CupertinoThemeData cupertinoTheme = const CupertinoThemeData(
     primaryContrastingColor: Color(0xff2c2c2c),
     textTheme: CupertinoTextThemeData(
         navLargeTitleTextStyle: TextStyle(fontFamily: 'BakbakOne', color: Color(0xff2c2c2c)),
-        navTitleTextStyle: TextStyle(fontFamily: 'BakbakOne', color: Color(0xff2c2c2c)),
+        navTitleTextStyle: TextStyle(fontFamily: 'BakbakOne', color: Color(0xff2c2c2c), fontSize: 20),
         primaryColor: Color(0xff2c2c2c),
         textStyle: TextStyle(
           fontFamily: 'Montserrat',
