@@ -39,32 +39,36 @@ class _SquaresState extends State<Squares> {
 
     return Container(
       color: const Color(0xfffaf7ed),
+
       child: SafeArea(
-          child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Center(
-                child: Container(
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: const BoxDecoration(
-                    color: Color(0xffFBF1A3),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Center(
+            child: Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: const BoxDecoration(
+                color: Color(0xffFBF1A3),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Life of an average person in months.'),
+                  const Text('One line equals 3 years.'),
+                  const SizedBox(height: 30),
+                  Expanded(
+                    child: GridView.count(
+                      crossAxisCount: 36,
+                      children: squares,
+                    ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text('Life of an average person in months.'),
-                      const Text('One line equals 3 years.'),
-                      const SizedBox(height: 30),
-                      Expanded(
-                        child: GridView.count(
-                          crossAxisCount: 36,
-                          children: squares,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ))),
+
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
   @override

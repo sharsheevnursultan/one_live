@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:one_life/pages/theme.dart';
 
 class FirstPage extends StatefulWidget {
@@ -52,7 +51,6 @@ class _FirstPageState extends State<FirstPage> {
                         padding: const EdgeInsets.fromLTRB(15,5,15,5),
                         onPressed: () {
                           Navigator.pushNamed(context, '/main');
-                          // Provider.of<LifeTrackerState>(context, listen: false).showInterstitialAd();
                         },
                         child: const Text(
                           'Next',

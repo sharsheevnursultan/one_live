@@ -126,6 +126,8 @@ class LifeTrackerState extends State<LifeTracker> with ChangeNotifier {
 
   get myAgeInSeconds => Provider.of<MyData>(context).myAgeInSeconds;
 
+
+
   //admobShow
   void showInterstitialAd() {
     if (_isInterstitialAdReady) {
@@ -161,9 +163,12 @@ class LifeTrackerState extends State<LifeTracker> with ChangeNotifier {
         ));
   }
 
+
+
   @override
   void initState() {
     super.initState();
+
     _createInterstitialAd();
   }
 
@@ -253,6 +258,7 @@ class LifeTrackerState extends State<LifeTracker> with ChangeNotifier {
                               children: [
                                 const Text(
                                     'Enter your birthday to find out your life data'),
+
                                 const SizedBox(height: 30),
                                 Row(
                                   mainAxisAlignment:
@@ -390,7 +396,6 @@ class LifeTrackerState extends State<LifeTracker> with ChangeNotifier {
                                           Text('$myAgeInSeconds'),
                                         ],
                                       ),
-                                      const SizedBox(height: 20),
                                     ],
                                   ),
                                 ),
@@ -420,6 +425,7 @@ class LifeTrackerState extends State<LifeTracker> with ChangeNotifier {
   @override
   void dispose() {
     super.dispose();
+
     print('main dispose');
   }
 
